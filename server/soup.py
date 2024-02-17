@@ -43,8 +43,4 @@ for tag_type in tag_types:
         if attributes["text"] or attributes["aria-label"]:
             tag_details.append(attributes)
 
-# Save the tag details to a JSON file
-with open("facebook.json", "w", encoding="utf-8") as json_file:
-    json.dump(tag_details, json_file, ensure_ascii=False, indent=4)
-
-print("Tag details have been saved to tag_details.json")
+print("Tag details have been saved to facebook.json")
