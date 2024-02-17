@@ -1,9 +1,9 @@
-import ChatInput from "./components/ChatInput/ChatInput";
+import Chat from "./components/Chat/Chat";
 
 function App() {
   return (
     <>
-      <ChatInput />
+      <Chat />
     </>
   );
 }
