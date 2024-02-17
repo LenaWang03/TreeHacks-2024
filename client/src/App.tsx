@@ -1,9 +1,9 @@
-import DefaultPrompts from "./components/DefaultPrompts/DefaultPrompt/DefaultPrompts";
+import ChatInput from "./components/ChatInput/ChatInput";
 
 function App() {
   return (
     <>
-      <DefaultPrompts />
+      <ChatInput />
     </>
   );
 }
