@@ -1,0 +1,13 @@
+.prompt-text {
+  font-size: 20px;
+  font-family: sans-serif;
+  padding-top: 10px;
+  text-align: center;
+}
+
+.prompt-box {
+  width: 160px;
+  height: 90px;
+  background-color: rgb(223, 222, 222);
+  border-radius: 16px;
+}
