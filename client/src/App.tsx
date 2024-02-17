@@ -1,8 +1,9 @@
-import DefaultPrompt from "./components/DefaultPrompt/DefaultPrompt";
+import DefaultPrompts from "./components/DefaultPrompts/DefaultPrompt/DefaultPrompts";
+
 function App() {
   return (
     <>
-      <DefaultPrompt />
+      <DefaultPrompts />
     </>
   );
 }
