@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, Body
 from pydantic import BaseModel
 from models import GenerateNextStepRequest, GenerateNextStepResponse, RedirectRequest, RedirectResponse
+from soup import process_html
 import uvicorn
 
 app = FastAPI()
@@ -27,7 +28,7 @@ async def redirect(request: RedirectRequest):
 
 
 @app.post("/generate-next-step/", response_model=GenerateNextStepResponse)
-async def generate_next_step(file: UploadFile = File(...), body: GenerateNextStepRequest = Body(...)):
+async def generate_next_step(request: GenerateNextStepRequest = Body(...)):
     """
     Receives a screenshot and details about the user's current state on the webpage and
     returns directions for the next step they should take and the related DOM elements.
@@ -36,6 +37,7 @@ async def generate_next_step(file: UploadFile = File(...), body: GenerateNextSte
     # Use OpenAI (vision) to generate overall description of the user's page and UI components
 
     # Concurrently: process and filter HTML elements with beautiful soup into JSON with important information
+    elements = process_html(request.html)
     
     # Create prompt that combines processed HTML JSON and description of user's page to ask for the next step based on their overall goal
 

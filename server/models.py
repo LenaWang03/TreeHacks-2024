@@ -18,6 +18,7 @@ class RedirectResponse(BaseModel):
   prompt: str  # The refined prompt for the user
 
 class GenerateNextStepRequest(BaseModel):
+  image_url: str # url to image showing current page state
   previous_steps: List[str] # the steps the user has taken so far
   prompt: str # the refined prompt of the desired action by the user
   html: str #  html from the page at the current state
