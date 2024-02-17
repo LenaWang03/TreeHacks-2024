@@ -1,5 +1,7 @@
+from typing import List, Optional
+
 from pydantic import BaseModel, HttpUrl
-from typing import Optional, List
+
 
 class DOMElement(BaseModel):
   id: str

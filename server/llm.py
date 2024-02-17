@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from openai import OpenAI
 import os
+from soup import process_html
 
 from utils import Timer, scale_image
 
@@ -8,6 +9,7 @@ load_dotenv()
 
 TOGETHER_API_KEY = os.environ.get("TOGETHER_API_KEY")
 OPEN_AI_API_KEY = os.environ.get("OPEN_AI_API_KEY")
+
 
 def load_together_model():
     client = OpenAI(
@@ -25,7 +27,7 @@ def load_openai_model():
 
 def get_page_description(client: OpenAI, encoded_url: str) -> str:
     scaled_image_url = scale_image(encoded_url, 0.3)
-    
+
     response = client.chat.completions.create(
         model="gpt-4-vision-preview",
         messages=[
@@ -47,6 +49,7 @@ def get_page_description(client: OpenAI, encoded_url: str) -> str:
     )
 
     return response.choices[0].message.content
+
 
 def get_page_description_from_url(client: OpenAI, url: str) -> str:
     chat_completion = client.chat.completions.create(
@@ -107,24 +110,53 @@ def get_next_step(client: OpenAI, desired_action: str, page_description: str) ->
     return chat_completion.choices[0].message.content
 
 
+def get_relevant_tag_ids(client: OpenAI, tags: str) -> str:
+    # Take in the directions for the next step (a list of steps, returned by Dylan's code),
+    # the JSON object of relevant tags, and the textual representation of the screenshot
+    # Pending addition of ids to HTML tags
+    next_step = 'Click the "Compose" button to start writing an email.'
+    prompt = (
+        "Here is the description for the next step: \n"
+        + next_step
+        + "\nHere is the JSON representation of the relevant HTML tags on the page: \n"
+        + tags
+        + ".\n Using this information, which tags from the JSON are relevant to the next step? Just return the ids of the relevant tags in a list."
+    )
+
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        model="mistralai/Mixtral-8x7B-Instruct-v0.1",
+        max_tokens=100,
+    )
+
+    relevant_tag_ids = chat_completion.choices[0].message.content
+    relevant_tag_ids = relevant_tag_ids.strip("][").split(", ")
+    return relevant_tag_ids
+
+
 if __name__ == "__main__":
     together_client = load_together_model()
     openai_client = load_openai_model()
-    
+
     img_encoded_path = r"server\example_data\encoded_img.txt"
-    
-    with open(img_encoded_path, 'r', encoding='utf-8') as file:
+
+    with open(img_encoded_path, "r", encoding="utf-8") as file:
         # Read the entire content of the file into a string
         file_content = file.read()
-    
+
     with Timer() as t:
         description = get_page_description(openai_client, file_content)
     print(f"description: {t.interval}")
-    
+
     # with Timer() as t:
     #     description = get_page_description_from_url(together_client, "https://stackoverflow.com")
     # print(f"description: {t.interval}")
-    
+
     with Timer() as t:
         next_step = get_next_step(
             together_client,
@@ -132,6 +164,11 @@ if __name__ == "__main__":
             "I want to search for a post about using OpenAI's API.",
         )
     print(f"next step: {t.interval}")
-        
+
     print(f"description: {description}")
     print(f"returns: {next_step}")
+
+    # Placeholder
+    with open("./gmail.html", "r", encoding="utf-8") as f:
+        html_content = f.read()
+        tags = str(process_html(html_content))
