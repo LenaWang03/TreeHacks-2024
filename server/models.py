@@ -27,7 +27,7 @@ class GenerateNextStepRequest(BaseModel):
 
 class GenerateNextStepResponse(BaseModel):
   directions: str  # The next step the user should take to achieve their desired action
-  related_elements: List[DOMElement]  # List of DOM elements related to the next step and their properties
+  relevant_tag_ids: List[DOMElement]  # List of ids related to the next step and their properties
   task_complete: bool  # True when the user has completed all steps for their desired action
 
 class UnclearException(BaseModel):
