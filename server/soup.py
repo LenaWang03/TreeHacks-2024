@@ -31,11 +31,16 @@ def process_html(html_content):
         for tag in soup.find_all(tag_type):
             attributes = extract_attributes(tag)
 
-            if attributes["text"] or attributes["aria-label"]:
+            if attributes.get("text", None) or attributes.get("aria_label", None):
                 tag_details.append(attributes)
 
-<<<<<<< HEAD
     return tag_details
-=======
-print("Tag details have been saved to facebook.json")
->>>>>>> 71e6fb803d2f356c7fc3efdae045bac2e337c50b
+
+if __name__ == "__main__":
+    file_path = r"server\example_data\gmail\gmail.html"
+    
+    with open(file_path, "r", encoding="utf-8") as file:
+        html_content = file.read()
+    
+    print(process_html(html_content)) 
+    

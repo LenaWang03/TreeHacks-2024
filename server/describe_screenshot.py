@@ -9,7 +9,7 @@ open_ai_api_key = env_vars["OPEN_AI_API_KEY"]
 
 client = OpenAI(api_key=open_ai_api_key)
 
-with open("image.png", "rb") as img_file:
+with open(r"server\example_data\gmail\gmail.png", "rb") as img_file:
     encoded_string = base64.b64encode(img_file.read()).decode('utf-8')
     encoded_string = f"data:image/png;base64,{encoded_string}"
 
