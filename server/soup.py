@@ -34,4 +34,8 @@ def process_html(html_content):
             if attributes["text"] or attributes["aria-label"]:
                 tag_details.append(attributes)
 
+<<<<<<< HEAD
     return tag_details
+=======
+print("Tag details have been saved to facebook.json")
+>>>>>>> 71e6fb803d2f356c7fc3efdae045bac2e337c50b
