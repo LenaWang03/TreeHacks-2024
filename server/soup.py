@@ -31,11 +31,7 @@ def process_html(html_content):
         for tag in soup.find_all(tag_type):
             attributes = extract_attributes(tag)
 
-            if attributes["text"] or attributes["aria-label"]:
+            if attributes["text"] or attributes["aria_label"]:
                 tag_details.append(attributes)
 
-<<<<<<< HEAD
     return tag_details
-=======
-print("Tag details have been saved to facebook.json")
->>>>>>> 71e6fb803d2f356c7fc3efdae045bac2e337c50b
