@@ -1,0 +1,7 @@
+.prompt-group {
+  display: flex;
+  width: 33%;
+  height: 30vh;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
