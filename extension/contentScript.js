@@ -107,7 +107,7 @@ function addOverlay(tags) {
               font-weight: 700;
               line-height: 30px;
               background: #FFD400;
-              color: white;
+              color: black;
               padding: 5px 0;
               text-align: left;
             }
