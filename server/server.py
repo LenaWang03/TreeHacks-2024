@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, Body
+from get_url import get_url, refine_prompt
 from pydantic import BaseModel
 from models import GenerateNextStepRequest, GenerateNextStepResponse, RedirectRequest, RedirectResponse
 from soup import process_html
@@ -20,10 +21,13 @@ async def health_check():
 async def redirect(request: RedirectRequest):
     """
     Receives a natural language description of what the user wants to do on a website,
-    and returns the website to visit and a refined prompt.
+    and returns the website to visit and a refined prompt. If the user clicks the buttons,
+    simply return the response. Otherwise, get the URL and refine the prompt.
     """
-
-    response = {"url": "www.facebook.com", "prompt": request}
+    if url is None:
+        url = get_url(request.prompt)
+        refined_prompt = refine_prompt(request.prompt)
+        response = {"url": url, "prompt": RedirectRequest(refined_prompt, url)}
     return response
 
 
