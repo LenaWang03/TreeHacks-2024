@@ -50,6 +50,20 @@ function addOverlay(tags) {
     );
   }
 
+  function drawBorder(element) {
+    const rect = element.getBoundingClientRect();
+    const borderWidth = 3; // The border width
+    const borderOffset = borderWidth / 2;
+    ctx.strokeStyle = "#0057FF"; // The border color
+    ctx.lineWidth = borderWidth;
+    ctx.strokeRect(
+      rect.left + borderOffset,
+      rect.top + borderOffset,
+      rect.width - borderWidth,
+      rect.height - borderWidth
+    );
+  }
+
   let elementRects = [];
 
   // Draw the overlay and the hole
