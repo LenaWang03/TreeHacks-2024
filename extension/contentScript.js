@@ -178,6 +178,7 @@ function addOverlay(tags) {
     tags.forEach((tag, index) => {
       const element = document.querySelector(`[gaze-id="${tag}"]`);
       clearHoleForElement(element, index);
+      drawBorder(element);
     });
   }
 
