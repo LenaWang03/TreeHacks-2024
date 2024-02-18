@@ -35,8 +35,6 @@ function sendHTML() {
     const url = `${API_URL}/generate-next-step`;
     console.log({ generateNextStepParams });
 
-    resolve();
-
     fetch(url, {
       method: "POST",
       headers: {
