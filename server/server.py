@@ -49,7 +49,7 @@ async def generate_next_step(request: GenerateNextStepRequest = Body(...)):
     task_complete returns True if the task has been completed.
     """
     # LLM call to determine if task is complete. It is complete if the prompt can be answered by looking on the current page (HTML)
-    task_complete = is_complete(request.prompt, request.html)
+    task_complete = is_complete(request.prompt, request.previous_steps)
 
     if task_complete:
         return {
@@ -57,11 +57,13 @@ async def generate_next_step(request: GenerateNextStepRequest = Body(...)):
             "relevant_tag_ids": None,
             "task_complete": True,
         }
-
-    # get_next_step uses no knowledge of the HTML of the page and just returns the logical next step
-    next_step = get_next_step(request.previous_steps, request.prompt)
+    
     # get_relevant_tag_ids finds the relevant tag ids based on the generated next step and the HTML of the page
     tag_details = get_tag_details(request.html)
+
+    # get_next_step uses no knowledge of the HTML of the page and just returns the logical next step
+    next_step = get_next_step(tag_details, request.prompt)
+    
     relevant_tag_ids = get_relevant_tag_ids(next_step, tag_details)
     
     return {

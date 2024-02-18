@@ -9,7 +9,7 @@ sessionStorage.setItem(
   "generateNextStepParams",
   JSON.stringify({
     previous_steps: [],
-    prompt: "I want to book a flight.",
+    prompt: "I want to buy a toy firetruck for my son.",
     html: "",
   })
 );
@@ -60,7 +60,7 @@ function sendHTML() {
             JSON.stringify(data["task_complete"])
           );
           sessionStorage.setItem(
-            "generateNextStepParams",
+            "highlightedElementIds",
             JSON.stringify(data["relevant_tag_ids"])
           );
           resolve(); // Only resolve when session storage is updated with new data
@@ -107,7 +107,8 @@ function addEventListenerWithKey(element, event, listener, key) {
 function addOverlay() {
   clearEventListeners(); // Clear previous event listeners to prevent duplication
 
-  const tags = ["gaze-3", "gaze-10", "gaze-20", "gaze-30"];
+  // const tags = ["gaze-3", "gaze-10", "gaze-20", "gaze-30"];
+  const tags = JSON.parse(sessionStorage.getItem("highlightedElementIds"));
   const taskDone = JSON.parse(sessionStorage.getItem("taskDone") || "false");
 
   if (taskDone) {
@@ -122,6 +123,7 @@ function addOverlay() {
   const ctx = canvas.getContext("2d");
 
   // Set canvas size to cover the whole viewport
+  canvas.id = "gaze-overlay"
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   canvas.style.position = "fixed";
@@ -172,7 +174,20 @@ function addOverlay() {
       const key = `event-${tag}`;
 
       const onInteraction = (e) => {
-        // Interaction logic remains unchanged
+        const currentStep = JSON.parse(sessionStorage.getItem("currentStep"));
+        const completedSteps = JSON.parse(
+          sessionStorage.getItem("completedSteps")
+        );
+
+        const overlay = document.getElementById("gaze-overlay")
+        overlay.remove();
+
+        completedSteps.push(currentStep);
+        sessionStorage.setItem(
+          "completedSteps",
+          JSON.stringify(completedSteps)
+        );
+        updateOverlay();
       };
 
       addEventListenerWithKey(element, event, onInteraction, key);
@@ -221,8 +236,10 @@ function addOverlay() {
 }
 
 const updateOverlay = async () => {
-  await sendHTML(); // Wait for sendHTML to complete
-  addOverlay(); // Then call addOverlay
+  setTimeout(async () => {
+    await sendHTML(); // Wait for sendHTML to complete
+    addOverlay(); // Then call addOverlay
+  }, 2000)
 };
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -230,5 +247,6 @@ const isEnabled = urlParams.get("gazeEnabled");
 
 if (isEnabled !== "false") {
   console.log("updating overlay...");
+
   updateOverlay();
 }
