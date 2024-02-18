@@ -49,7 +49,7 @@ function addOverlay(tags) {
       y < rect.top + rect.height
     );
   }
-  
+
   let elementRects = [];
 
   // Draw the overlay and the hole
@@ -62,18 +62,108 @@ function addOverlay(tags) {
     ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    function clearHoleForElement(element) {
+    function clearHoleForElement(element, index) {
       if (element) {
         const rect = element.getBoundingClientRect();
         ctx.clearRect(rect.left, rect.top, rect.width, rect.height);
+        if (index === Math.floor(tags.length / 2)) {
+          const tooltipHTML = `
+            <div id="gazeTooltip" class="gaze-tooltip">
+              <div class="gaze-tooltip-triangle"></div>
+              <div class="gaze-tooltip-step">Step 2</div>
+              <div class="gaze-tooltip-text">Type in your grandson's name</div>
+              <div class="gaze-tooltip-close">&times;</div>
+            </div>
+            `;
+
+          // The CSS for the tooltip
+          const tooltipCSS = `
+            .gaze-tooltip {
+              width: 346px;
+              height: 191px;
+              border-radius: 15px;
+              background: #FFD400;
+              border: 5px solid #FFD400;
+              position: absolute;
+              padding: 10px;
+              box-sizing: border-box;
+              font-family: 'Inter', sans-serif;
+              z-index: 10000;
+            }
+
+            .gaze-tooltip-step {
+              font-size: 14px;
+              font-weight: 700;
+              line-height: 17px;
+              color: #0057FF;
+              padding: 5px 10px;
+              border-radius: 10px;
+              display: inline-block;
+              margin-bottom: 5px;
+            }
+
+            .gaze-tooltip-text {
+              font-size: 25px;
+              font-weight: 700;
+              line-height: 30px;
+              background: #FFD400;
+              color: white;
+              padding: 5px 0;
+              text-align: left;
+            }
+
+            .gaze-tooltip-close {
+              font-size: 30px;
+              line-height: 30px;
+              color: blue;
+              position: absolute;
+              top: 10px;
+              right: 10px;
+              cursor: pointer;
+            }
+
+            .gaze-tooltip-triangle {
+              position: absolute;
+              top: -20px;
+              left: 20%;
+              transform: translateX(-50%);
+              width: 0;
+              height: 0;
+              border-left: 20px solid transparent; /* Adjust size to match the tooltip design */
+              border-right: 20px solid transparent; /* Adjust size to match the tooltip design */
+              border-bottom: 20px solid #FFD400; /* The color should match the tooltip's background */
+            }
+            `;
+
+          function injectStyles(styles) {
+            const styleSheet = document.createElement("style");
+            styleSheet.innerText = styles;
+            document.head.appendChild(styleSheet);
+          }
+
+          injectStyles(tooltipCSS);
+          document.body.insertAdjacentHTML("beforeend", tooltipHTML);
+          const tooltipElement = document.getElementById("gazeTooltip");
+          tooltipElement.style.zIndex = "100001";
+          tooltipElement.style.top = `${rect.bottom + window.scrollY + 20}px`;
+          tooltipElement.style.left = `${rect.left + window.scrollX}px`;
+
+          function closeTooltip() {
+            tooltipElement.remove();
+          }
+
+          document
+            .querySelector(".gaze-tooltip-close")
+            .addEventListener("click", closeTooltip);
+        }
         elementRects.push([rect, element]);
       }
     }
 
     // Locate the first anchor tag and get its position and dimensions
-    tags.forEach((tag) => {
+    tags.forEach((tag, index) => {
       const element = document.querySelector(`[gaze-id="${tag}"]`);
-      clearHoleForElement(element);
+      clearHoleForElement(element, index);
     });
   }
 
@@ -118,13 +208,13 @@ function sleep(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-const tags = ["gaze-10", "gaze-14", "gaze-19"];
+const tags = ["gaze-14", "gaze-19", "gaze-25"];
 const urlParams = new URLSearchParams(window.location.search);
 const isEnabled = urlParams.get("gazeEnabled");
 
 if (isEnabled === "true") {
   (async () => {
-    await sleep(3000);
+    await sleep(2000);
     chrome.runtime.sendMessage({ action: "captureTab" }, (response) => {
       console.log("Screenshot taken");
     });
