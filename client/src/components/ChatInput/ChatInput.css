@@ -1,12 +1,12 @@
 input {
-    outline: none;
-    width: 100%;
-    font-size: 20px;
-    border: none;
+  outline: none;
+  width: 100%;
+  font-size: 20px;
+  border: none;
 }
 
 .input-container {
-    /* width: 100%;
+  /* width: 100%;
     font-size: 16px;
     padding-left: 10px;
     border: 4px solid #0057FF;
@@ -20,37 +20,37 @@ input {
     justify-content: center;
     gap: 10px;
     margin-top: 50px; */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 100px;
-    width: 100%;
-    border-bottom: #0057FF 5px solid;
-    color: #0057FF;
-    padding-bottom: 10px;
-    font-size: 50px;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 100px;
+  width: 1000px;
+  border-bottom: #0057ff 5px solid;
+  color: #0057ff;
+  padding-bottom: 10px;
+  font-size: 50px;
+  gap: 20px;
 }
 
 .enterButton {
-    background-color: #0057FF;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 15px 50px;
-    font-size: 20px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  background-color: #0057ff;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 50px;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .searchCenter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    gap: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 50px;
 }
