@@ -13,6 +13,9 @@ function clearOverlay() {
 }
 
 function addOverlay(tags, stepNumber, text) {
+  if (stepNumber === null) {
+    return;
+  }
   // Create the canvas element
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -49,6 +52,21 @@ function addOverlay(tags, stepNumber, text) {
     );
   }
 
+  // Function to handle keypress event
+  function handleKeyPress(event) {
+    // Check if the Enter key was pressed
+    if ((event.key === "Enter" || event.keyCode === 13) && stepNumber === 2) {
+      clearOverlay();
+      addOverlay(
+        [
+          "x1n2onr6 x1ja2u2z x78zum5 x2lah0s xl56j7k x6s0dn4 xozqiw3 x1q0g3np xi112ho x17zwfj4 x585lrc x1403ito x972fbf xcfux6l x1qhh985 xm0m39n x9f619 xn6708d x1ye3gou x1hr4nm9 x1r1pt67",
+        ],
+        3,
+        "Click on 'View profile'"
+      );
+    }
+  }
+
   let elementRects = [];
 
   // Draw the overlay and the hole
@@ -81,8 +99,8 @@ function addOverlay(tags, stepNumber, text) {
               width: 346px;
               height: 191px;
               border-radius: 15px;
-              background: #FFD400;
-              border: 5px solid #FFD400;
+              background: white;
+              border: 5px solid #0057FF;
               position: absolute;
               padding: 10px;
               box-sizing: border-box;
@@ -105,7 +123,7 @@ function addOverlay(tags, stepNumber, text) {
               font-size: 25px;
               font-weight: 700;
               line-height: 30px;
-              background: #FFD400;
+              background: white;
               color: black;
               padding: 5px 0;
               text-align: left;
@@ -130,7 +148,7 @@ function addOverlay(tags, stepNumber, text) {
               height: 0;
               border-left: 20px solid transparent; /* Adjust size to match the tooltip design */
               border-right: 20px solid transparent; /* Adjust size to match the tooltip design */
-              border-bottom: 20px solid #FFD400; /* The color should match the tooltip's background */
+              border-bottom: 20px solid #0057FF; /* The color should match the tooltip's background */
             }
             `;
 
@@ -168,39 +186,29 @@ function addOverlay(tags, stepNumber, text) {
     });
   }
 
-  //   // Draw the semi-transparent black overlay
-  //   ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
-  //   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  drawOverlay(tags);
 
-  //   function clearHoleForElement(element) {
-  //     if (element) {
-  //       const rect = element.getBoundingClientRect();
-  //       ctx.clearRect(rect.left, rect.top, rect.width, rect.height);
-  //       elementRects.push([rect, element]);
-  //     }
-  //   }
+  // Add the canvas to the body
+  document.body.appendChild(canvas);
 
-  //   // Locate the first anchor tag and get its position and dimensions
-  //   tags.forEach((tag) => {
-  //     const element = document.querySelector(`[gaze-id="${tag}"]`);
-  //     clearHoleForElement(element);
-  //   });
-  // }
+  // Adjust the overlay when the user scrolls or resizes the window
+  const adjustOverlay = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    drawOverlay(tags); // Redraw the overlay and hole
+  };
 
-  // drawOverlay(tags);
+  window.addEventListener("resize", adjustOverlay);
+  window.addEventListener("scroll", adjustOverlay);
 
-  // // Add the canvas to the body
-  // document.body.appendChild(canvas);
-
-  // // Adjust the overlay when the user scrolls or resizes the window
-  // const adjustOverlay = () => {
-  //   canvas.width = window.innerWidth;
-  //   canvas.height = window.innerHeight;
-  //   drawOverlay(tags); // Redraw the overlay and hole
-  // };
-
-  // window.addEventListener("resize", adjustOverlay);
-  // window.addEventListener("scroll", adjustOverlay);
+  window.addEventListener("keypress", handleKeyPress);
+  // Mouse move event to change cursor style
+  canvas.addEventListener("mousemove", (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    const isOverHole = elementRects.some((arr) => isPointInHole(x, y, arr[0]));
+    canvas.style.cursor = isOverHole ? "pointer" : "default";
+  });
 
   // Click event to trigger click on underlying element
   canvas.addEventListener("click", (e) => {
@@ -213,10 +221,36 @@ function addOverlay(tags, stepNumber, text) {
           clearOverlay();
           addOverlay(
             [
-              "xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x9f619 xdt5ytf xh8yej3",
+              "xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x9f619 xdt5ytf xh8yej3 x1lliihq x1n2onr6 xhq5o37 x1qxoq08 x1cpjm7i",
             ],
             2,
             "Type in your grandson's name and press Enter (↵)"
+          );
+        } else if (stepNumber === 3) {
+          arr[1].click();
+          clearOverlay();
+          addOverlay(
+            [
+              "x6s0dn4 x9f619 x78zum5 x2lah0s x1hshjfz x1n2onr6 xng8ra x1pi30zi x1swvt13",
+            ],
+            4,
+            "Click on 'Photos'"
+          );
+        } else if (stepNumber === 4) {
+          arr[1].click();
+          clearOverlay();
+          addOverlay(
+            ["xyamay9 x1pi30zi x1l90r2v x1swvt13"],
+            5,
+            "Click any photo you want to view"
+          );
+        } else if (stepNumber === 5) {
+          arr[1].click();
+          clearOverlay();
+          addOverlay(
+            ["x1ey2m1c x9f619 xds687c x10l6tqk x17qophe x13vifvy"],
+            null,
+            ""
           );
         }
       }
