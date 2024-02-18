@@ -69,7 +69,8 @@ function addOverlay(tags) {
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     elementRects = [];
-
+  }
+  
   //   // Draw the semi-transparent black overlay
   //   ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
   //   ctx.fillRect(0, 0, canvas.width, canvas.height);
