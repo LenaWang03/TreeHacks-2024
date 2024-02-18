@@ -1,6 +1,5 @@
 import "../../index.css";
 import DefaultPrompts from "../DefaultPrompts/DefaultPrompt/DefaultPrompts";
-import ChatInput from "../ChatInput/ChatInput";
 import logo from "../../imgs/logo.svg";
 import { Link } from "react-router-dom";
 export default function Chat() {
