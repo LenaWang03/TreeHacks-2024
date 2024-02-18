@@ -14,25 +14,51 @@ body {
 }
 
 .landing {
-  padding: 150px;
+  padding: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
+.ex {
+  font-size: 40px;
+  color: #0057FF;
+  float: right;
+  margin-bottom: -20px;
+  cursor: pointer;
+}
 
+.popular {
+  padding: 150px;
+  padding-top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+}
+
+.search {
+  padding: 0 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
 .ctaButton button{
   margin-top: 50px;
   background-color: #0057FF;
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
+  border-radius: 50px;
+  padding: 15px 50px;
   font-size: 20px;
   font-weight: 600;
   cursor: pointer;
+
+  
 }
 
 .logo {
@@ -41,6 +67,16 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 20px;
+}
+
+.logoRight {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 50px;
+  padding-bottom: 0;
+
 }
 
 .subheading {
@@ -102,10 +138,25 @@ body {
 }
 
 .chatInput {
-  padding: 100px 300px;
+  padding: 0 100px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 20px;
   width: 100%;
+}
+
+.inputRoute {
+  width: 100%;
+  border-radius: 10px;
+  border: 5px solid #0057FF;
+  margin: 0 10px;
+  padding: 20px;
+  text-align: center;
+  color: #0057FF;
+  font-weight: 600;
+  font-size: 25px;
+  text-decoration: none;
+  margin-top: 50px;
 }

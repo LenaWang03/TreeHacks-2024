@@ -1,0 +1,41 @@
+h1 {
+  color: red;
+}
+
+img {
+    width: 120px;
+}
+
+body {
+  border-radius: 20px;
+  padding: 10px;
+  width: 250px;
+}
+
+.topBar {
+  color: #0057ff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.line {
+  border-bottom: 1px solid #cacaca;
+  padding-top: 10px;
+}
+
+.subheading {
+    font-size: 16px;
+    
+}
+
+.bottomBar {
+  color: #0057ff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap:10px;
+  font-weight: bold;
+  /* flex-direction: row; */
+}

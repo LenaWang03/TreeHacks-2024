@@ -168,30 +168,39 @@ function addOverlay(tags, stepNumber, text) {
     });
   }
 
-  drawOverlay(tags);
+  //   // Draw the semi-transparent black overlay
+  //   ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
+  //   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Add the canvas to the body
-  document.body.appendChild(canvas);
+  //   function clearHoleForElement(element) {
+  //     if (element) {
+  //       const rect = element.getBoundingClientRect();
+  //       ctx.clearRect(rect.left, rect.top, rect.width, rect.height);
+  //       elementRects.push([rect, element]);
+  //     }
+  //   }
 
-  // Adjust the overlay when the user scrolls or resizes the window
-  const adjustOverlay = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    drawOverlay(tags); // Redraw the overlay and hole
-  };
+  //   // Locate the first anchor tag and get its position and dimensions
+  //   tags.forEach((tag) => {
+  //     const element = document.querySelector(`[gaze-id="${tag}"]`);
+  //     clearHoleForElement(element);
+  //   });
+  // }
 
-  window.addEventListener("resize", adjustOverlay);
-  window.addEventListener("scroll", adjustOverlay);
+  // drawOverlay(tags);
 
-  // Listen for mouse movement to change the cursor style when hovering over the hole
+  // // Add the canvas to the body
+  // document.body.appendChild(canvas);
 
-  // Mouse move event to change cursor style
-  canvas.addEventListener("mousemove", (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
-    const isOverHole = elementRects.some((arr) => isPointInHole(x, y, arr[0]));
-    canvas.style.cursor = isOverHole ? "pointer" : "default";
-  });
+  // // Adjust the overlay when the user scrolls or resizes the window
+  // const adjustOverlay = () => {
+  //   canvas.width = window.innerWidth;
+  //   canvas.height = window.innerHeight;
+  //   drawOverlay(tags); // Redraw the overlay and hole
+  // };
+
+  // window.addEventListener("resize", adjustOverlay);
+  // window.addEventListener("scroll", adjustOverlay);
 
   // Click event to trigger click on underlying element
   canvas.addEventListener("click", (e) => {

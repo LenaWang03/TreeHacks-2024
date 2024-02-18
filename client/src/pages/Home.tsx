@@ -21,7 +21,7 @@ const Home = () => {
             gaze is a web browser that is designed to be simple and easy to use.
             It is built with the user in mind.
           </div>
-          <div className="ctaButton">
+          <div className="ctaButton" style={{marginBottom:"70px"}}>
             <Link to="/home">
               <button>Get Started</button>
             </Link>
@@ -42,7 +42,7 @@ const Home = () => {
               title="Follow"
               text="the instructions on the screen"
             />
-            <Card number="3" title="Acheive" text="your goals :)" />
+            <Card number="3" title="Achieve" text="your goals :)" />
           </div>
         </div>
       </div>
