@@ -1,33 +1,18 @@
-function sendHTML() {
-  // Select all relevant elements
-  const elements = document.querySelectorAll("a, input, button, textarea");
+function clearOverlay() {
+  // Remove the canvas from the DOM
+  const canvas = document.querySelector("canvas");
+  if (canvas) {
+    canvas.parentNode.removeChild(canvas);
+  }
 
-  // Assign a unique "gaze-id" to each element
-  elements.forEach((element, index) => {
-    element.setAttribute("gaze-id", `gaze-${index + 1}`);
-  });
-
-  const serializedHtml = new XMLSerializer().serializeToString(document);
-  console.log(serializedHtml);
-  // const url = 'YOUR_BACKEND_ENDPOINT'; // Replace with your actual backend endpoint
-
-  //   fetch(url, {
-  //       method: 'POST',
-  //       headers: {
-  //           'Content-Type': 'application/json',
-  //       },.
-  //       body: JSON.stringify({ html: serializedHtml }),
-  //   })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //       console.log('Success:', data);
-  //   })
-  //   .catch((error) => {
-  //       console.error('Error:', error);
-  //   });
+  // Remove the tooltip from the DOM
+  const tooltip = document.getElementById("gazeTooltip");
+  if (tooltip) {
+    tooltip.parentNode.removeChild(tooltip);
+  }
 }
 
-function addOverlay(tags) {
+function addOverlay(tags, stepNumber, text) {
   // Create the canvas element
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -84,8 +69,8 @@ function addOverlay(tags) {
           const tooltipHTML = `
             <div id="gazeTooltip" class="gaze-tooltip">
               <div class="gaze-tooltip-triangle"></div>
-              <div class="gaze-tooltip-step">Step 2</div>
-              <div class="gaze-tooltip-text">Type in your grandson's name</div>
+              <div class="gaze-tooltip-step">Step ${stepNumber}</div>
+              <div class="gaze-tooltip-text">${text}</div>
               <div class="gaze-tooltip-close">&times;</div>
             </div>
             `;
@@ -176,7 +161,8 @@ function addOverlay(tags) {
 
     // Locate the first anchor tag and get its position and dimensions
     tags.forEach((tag, index) => {
-      const element = document.querySelector(`[gaze-id="${tag}"]`);
+      const id = tag.split(" ").join(".");
+      const element = document.querySelector("." + id);
       clearHoleForElement(element, index);
       drawBorder(element);
     });
@@ -213,27 +199,28 @@ function addOverlay(tags) {
     const y = e.clientY;
     elementRects.forEach((arr) => {
       if (isPointInHole(x, y, arr[0])) {
-        arr[1].click();
+        if (stepNumber === 1) {
+          arr[1].click();
+          clearOverlay();
+          addOverlay(
+            [
+              "xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r xexx8yu x4uap5 x18d9i69 xkhd6sd x9f619 xdt5ytf xh8yej3",
+            ],
+            2,
+            "Type in your grandson's name and press Enter (↵)"
+          );
+        }
       }
     });
   });
 }
 
-function sleep(time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
-
-const tags = ["gaze-14", "gaze-19", "gaze-25"];
+const tags = [
+  "x1a2a7pz x1qjc9v5 xnwf7zb x40j3uw x1s7lred x15gyhx8 x9f619 x78zum5 x1fns5xo x1n2onr6 xh8yej3 x1ba4aug xmjcpbm",
+];
 const urlParams = new URLSearchParams(window.location.search);
 const isEnabled = urlParams.get("gazeEnabled");
 
 if (isEnabled === "true") {
-  (async () => {
-    await sleep(2000);
-    chrome.runtime.sendMessage({ action: "captureTab" }, (response) => {
-      console.log("Screenshot taken");
-    });
-    sendHTML();
-    addOverlay(tags);
-  })();
+  addOverlay(tags, 1, "Click the search bar to get started!");
 }
