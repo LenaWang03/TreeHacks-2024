@@ -2,4 +2,110 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.landing {
+  padding: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+
+
+.ctaButton button{
+  margin-top: 50px;
+  background-color: #0057FF;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.subheading {
+  color: #0057FF;
+  font-weight: 600;
+}
+
+.bigText {
+  position: relative;
+  display: inline-block;
+  font-size: 60px;
+  font-weight: 800;
+  color: #0057FF;
+  padding-top: 100px;
+}
+
+.smallText {
+  padding-top: 50px;
+}
+.underline {
+  position: relative;
+}
+
+.underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 10%; /* Adjust this value to shift the underline up */
+  width: 100%;
+  height: 20%; /* Adjust this value to change the thickness of the underline */
+  background-color: #FFD400;
+  z-index: -1;
+}
+
+.steps {
+  background-color: #0057FF;
+  padding: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.step {
+  padding-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 50px;
+
+}
+
+.subwhite {
+  color: white;
+  font-weight: 600;
+  font-size: 40px;
+}
+
+.chatInput {
+  padding: 100px 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
 }
