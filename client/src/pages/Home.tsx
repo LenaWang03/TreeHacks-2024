@@ -42,7 +42,7 @@ const Home = () => {
               title="Follow"
               text="the instructions on the screen"
             />
-            <Card number="3" title="Acheive" text="your goals :)" />
+            <Card number="3" title="Achieve" text="your goals :)" />
           </div>
         </div>
       </div>
