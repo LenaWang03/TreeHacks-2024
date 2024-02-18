@@ -9,7 +9,7 @@ export default function Chat() {
         <Link to="/">
           <img src={logo} alt="logo" />
         </Link>
-        <div className="subheading">gaze.</div>
+        <div className="subheading">polaris.</div>
       </div>
       <div className="popular">
         <div
@@ -20,7 +20,6 @@ export default function Chat() {
         </div>
         <div className="defaultPrompts">
           <DefaultPrompts />
-          
         </div>
       </div>
     </div>

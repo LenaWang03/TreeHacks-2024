@@ -11,7 +11,7 @@ export default function DefaultPrompts() {
     <div className="prompt-group">
       <DefaultPrompt
         prompt="Facebook"
-        description="show me images of my grandson"
+        description="show me my grandson's profile"
         icon={<FaFacebook />}
       />
       <DefaultPrompt
@@ -30,7 +30,7 @@ export default function DefaultPrompts() {
         icon={<FaAmazon />}
       />
       <Link to="/search" className="inputRoute">
-          Customize Task
+        Customize Task
       </Link>
     </div>
   );

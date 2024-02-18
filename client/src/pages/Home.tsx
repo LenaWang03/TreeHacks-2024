@@ -12,16 +12,16 @@ const Home = () => {
             <Link to="/">
               <img src={logo} alt="logo" />
             </Link>
-            <div className="subheading">gaze.</div>
+            <div className="subheading">polaris.</div>
           </div>
           <div className="bigText">
             Navigating the web made <span className="underline">easy.</span>
           </div>
           <div className="smallText">
-            gaze is a web browser that is designed to be simple and easy to use.
-            It is built with the user in mind.
+            polaris is a web browser that is designed to be simple and easy to
+            use. It is built with the user in mind.
           </div>
-          <div className="ctaButton" style={{marginBottom:"70px"}}>
+          <div className="ctaButton" style={{ marginBottom: "70px" }}>
             <Link to="/home">
               <button>Get Started</button>
             </Link>
