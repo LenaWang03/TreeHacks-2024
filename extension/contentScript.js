@@ -9,22 +9,34 @@ function sendHTML() {
 
   const serializedHtml = new XMLSerializer().serializeToString(document);
   console.log(serializedHtml);
-  // const url = 'YOUR_BACKEND_ENDPOINT'; // Replace with your actual backend endpoint
 
-  //   fetch(url, {
-  //       method: 'POST',
-  //       headers: {
-  //           'Content-Type': 'application/json',
-  //       },.
-  //       body: JSON.stringify({ html: serializedHtml }),
-  //   })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //       console.log('Success:', data);
-  //   })
-  //   .catch((error) => {
-  //       console.error('Error:', error);
-  //   });
+  let generateNextStepParams = JSON.parse(
+    sessionStorage.getItem("generateNextStepParams") || {}
+  );
+  generateNextStepParams["html"] = serializedHtml;
+  sessionStorage.setItem(
+    "generateNextStepParams",
+    JSON.stringify(generateNextStepParams)
+  );
+
+  const url = `${API_URL}/generate-next-step`; // Replace with your actual backend endpoint
+
+  console.log({ generateNextStepParams });
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(generateNextStepParams),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
 
 function addOverlay(tags) {
@@ -57,61 +69,62 @@ function addOverlay(tags) {
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     elementRects = [];
-
-    // Draw the semi-transparent black overlay
-    ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    function clearHoleForElement(element) {
-      if (element) {
-        const rect = element.getBoundingClientRect();
-        ctx.clearRect(rect.left, rect.top, rect.width, rect.height);
-        elementRects.push([rect, element]);
-      }
-    }
-
-    // Locate the first anchor tag and get its position and dimensions
-    tags.forEach((tag) => {
-      const element = document.querySelector(`[gaze-id="${tag}"]`);
-      clearHoleForElement(element);
-    });
   }
+  
+  //   // Draw the semi-transparent black overlay
+  //   ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
+  //   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  drawOverlay(tags);
+  //   function clearHoleForElement(element) {
+  //     if (element) {
+  //       const rect = element.getBoundingClientRect();
+  //       ctx.clearRect(rect.left, rect.top, rect.width, rect.height);
+  //       elementRects.push([rect, element]);
+  //     }
+  //   }
 
-  // Add the canvas to the body
-  document.body.appendChild(canvas);
+  //   // Locate the first anchor tag and get its position and dimensions
+  //   tags.forEach((tag) => {
+  //     const element = document.querySelector(`[gaze-id="${tag}"]`);
+  //     clearHoleForElement(element);
+  //   });
+  // }
 
-  // Adjust the overlay when the user scrolls or resizes the window
-  const adjustOverlay = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    drawOverlay(tags); // Redraw the overlay and hole
-  };
+  // drawOverlay(tags);
 
-  window.addEventListener("resize", adjustOverlay);
-  window.addEventListener("scroll", adjustOverlay);
+  // // Add the canvas to the body
+  // document.body.appendChild(canvas);
 
-  // Listen for mouse movement to change the cursor style when hovering over the hole
+  // // Adjust the overlay when the user scrolls or resizes the window
+  // const adjustOverlay = () => {
+  //   canvas.width = window.innerWidth;
+  //   canvas.height = window.innerHeight;
+  //   drawOverlay(tags); // Redraw the overlay and hole
+  // };
 
-  // Mouse move event to change cursor style
-  canvas.addEventListener("mousemove", (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
-    const isOverHole = elementRects.some((arr) => isPointInHole(x, y, arr[0]));
-    canvas.style.cursor = isOverHole ? "pointer" : "default";
-  });
+  // window.addEventListener("resize", adjustOverlay);
+  // window.addEventListener("scroll", adjustOverlay);
 
-  // Click event to trigger click on underlying element
-  canvas.addEventListener("click", (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
-    elementRects.forEach((arr) => {
-      if (isPointInHole(x, y, arr[0])) {
-        arr[1].click();
-      }
-    });
-  });
+  // // Listen for mouse movement to change the cursor style when hovering over the hole
+
+  // // Mouse move event to change cursor style
+  // canvas.addEventListener("mousemove", (e) => {
+  //   const x = e.clientX;
+  //   const y = e.clientY;
+  //   const isOverHole = elementRects.some((arr) => isPointInHole(x, y, arr[0]));
+  //   canvas.style.cursor = isOverHole ? "pointer" : "default";
+  // });
+
+  // // Click event to trigger click on underlying element
+  // canvas.addEventListener("click", (e) => {
+  //   const x = e.clientX;
+  //   const y = e.clientY;
+  //   elementRects.forEach((arr) => {
+  //     if (isPointInHole(x, y, arr[0])) {
+  //       arr[1].click();
+  //     }
+  //   });
+  // });
 }
 
 function sleep(time) {

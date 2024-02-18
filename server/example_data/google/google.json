@@ -1,0 +1,291 @@
+[
+    {
+        "type": "a",
+        "text": "About",
+        "aria-label": null,
+        "href": "https://about.google/?fg=1&utm_source=google-US&utm_medium=referral&utm_campaign=hp-header",
+        "class": [
+            "MV3Tnb"
+        ],
+        "ping": "/url?sa=t&rct=j&source=webhp&url=https://about.google/%3Ffg%3D1%26utm_source%3Dgoogle-US%26utm_medium%3Dreferral%26utm_campaign%3Dhp-header&ved=0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQkNQCCAI&bl=D_FB&opi=89978449"
+    },
+    {
+        "type": "a",
+        "text": "Store",
+        "aria-label": null,
+        "href": "https://store.google.com/US?utm_source=hp_header&utm_medium=google_ooo&utm_campaign=GS100042&hl=en-US",
+        "class": [
+            "MV3Tnb"
+        ],
+        "ping": "/url?sa=t&rct=j&source=webhp&url=https://store.google.com/US%3Futm_source%3Dhp_header%26utm_medium%3Dgoogle_ooo%26utm_campaign%3DGS100042%26hl%3Den-US&ved=0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQpMwCCAM&bl=D_FB&opi=89978449"
+    },
+    {
+        "type": "a",
+        "text": "Gmail",
+        "aria-label": "Gmail (opens a new tab)",
+        "href": "https://mail.google.com/mail/?authuser=0&ogbl",
+        "class": [
+            "gb_H"
+        ],
+        "data-pid": "23",
+        "target": "_top"
+    },
+    {
+        "type": "a",
+        "text": "Images",
+        "aria-label": "Search for Images (opens a new tab)",
+        "href": "https://www.google.com/imghp?hl=en&authuser=0&ogbl",
+        "class": [
+            "gb_H"
+        ],
+        "data-pid": "2",
+        "target": "_top"
+    },
+    {
+        "type": "a",
+        "text": "",
+        "aria-label": "Google apps",
+        "href": "https://www.google.com/intl/en/about/products",
+        "class": [
+            "gb_d"
+        ],
+        "aria-expanded": "false",
+        "role": "button",
+        "tabindex": "0"
+    },
+    {
+        "type": "a",
+        "text": "",
+        "aria-label": "Google Account: Dylan Lau  \n    (dylanl@metrized.com)",
+        "href": "https://accounts.google.com/SignOutOptions?hl=en&continue=https://www.google.com/&ec=GBRAmgQ",
+        "class": [
+            "gb_d",
+            "gb_Fa",
+            "gb_J"
+        ],
+        "tabindex": "0",
+        "role": "button"
+    },
+    {
+        "type": "a",
+        "text": "Advertising",
+        "aria-label": null,
+        "href": "https://www.google.com/intl/en_us/ads/?subid=ww-ww-et-g-awa-a-g_hpafoot1_1!o2&utm_source=google.com&utm_medium=referral&utm_campaign=google_hpafooter&fg=1",
+        "class": [
+            "pHiOh"
+        ],
+        "ping": "/url?sa=t&rct=j&source=webhp&url=https://www.google.com/intl/en_us/ads/%3Fsubid%3Dww-ww-et-g-awa-a-g_hpafoot1_1!o2%26utm_source%3Dgoogle.com%26utm_medium%3Dreferral%26utm_campaign%3Dgoogle_hpafooter%26fg%3D1&ved=0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQkdQCCB0&bl=D_FB&opi=89978449"
+    },
+    {
+        "type": "a",
+        "text": "Business",
+        "aria-label": null,
+        "href": "https://www.google.com/services/?subid=ww-ww-et-g-awa-a-g_hpbfoot1_1!o2&utm_source=google.com&utm_medium=referral&utm_campaign=google_hpbfooter&fg=1",
+        "class": [
+            "pHiOh"
+        ],
+        "ping": "/url?sa=t&rct=j&source=webhp&url=https://www.google.com/services/%3Fsubid%3Dww-ww-et-g-awa-a-g_hpbfoot1_1!o2%26utm_source%3Dgoogle.com%26utm_medium%3Dreferral%26utm_campaign%3Dgoogle_hpbfooter%26fg%3D1&ved=0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQktQCCB4&bl=D_FB&opi=89978449"
+    },
+    {
+        "type": "a",
+        "text": "How Search works",
+        "aria-label": null,
+        "href": "https://google.com/search/howsearchworks/?fg=1",
+        "class": [
+            "pHiOh"
+        ]
+    },
+    {
+        "type": "a",
+        "text": "Our third decade of climate action: join us",
+        "aria-label": null,
+        "href": "https://sustainability.google/?utm_source=googlehpfooter&utm_medium=housepromos&utm_campaign=bottom-footer&utm_content=",
+        "class": [
+            "pHiOh"
+        ],
+        "ping": "/url?sa=t&rct=j&source=webhp&url=https://sustainability.google/%3Futm_source%3Dgooglehpfooter%26utm_medium%3Dhousepromos%26utm_campaign%3Dbottom-footer%26utm_content%3D&ved=0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQiM8HCB8&bl=D_FB&opi=89978449"
+    },
+    {
+        "type": "a",
+        "text": "Privacy",
+        "aria-label": null,
+        "href": "https://policies.google.com/privacy?hl=en&fg=1",
+        "class": [
+            "pHiOh"
+        ],
+        "ping": "/url?sa=t&rct=j&source=webhp&url=https://policies.google.com/privacy%3Fhl%3Den%26fg%3D1&ved=0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQ8awCCCA&bl=D_FB&opi=89978449"
+    },
+    {
+        "type": "a",
+        "text": "Terms",
+        "aria-label": null,
+        "href": "https://policies.google.com/terms?hl=en&fg=1",
+        "class": [
+            "pHiOh"
+        ],
+        "ping": "/url?sa=t&rct=j&source=webhp&url=https://policies.google.com/terms%3Fhl%3Den%26fg%3D1&ved=0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQ8qwCCCE&bl=D_FB&opi=89978449"
+    },
+    {
+        "type": "a",
+        "text": "Search settings",
+        "aria-label": null,
+        "href": "https://www.google.com/preferences?hl=en&fg=1",
+        "role": "menuitem",
+        "tabindex": "-1"
+    },
+    {
+        "type": "a",
+        "text": "Advanced search",
+        "aria-label": null,
+        "href": "/advanced_search?hl=en&fg=1",
+        "role": "menuitem",
+        "tabindex": "-1"
+    },
+    {
+        "type": "a",
+        "text": "Your data in Search",
+        "aria-label": null,
+        "href": "https://myactivity.google.com/privacyadvisor/search?utm_source=googlemenu&fg=1",
+        "role": "menuitem",
+        "tabindex": "-1"
+    },
+    {
+        "type": "a",
+        "text": "Search history",
+        "aria-label": null,
+        "href": "https://myactivity.google.com/product/search?utm_source=google&hl=en&fg=1",
+        "role": "menuitem",
+        "tabindex": "-1"
+    },
+    {
+        "type": "a",
+        "text": "Search help",
+        "aria-label": null,
+        "href": "https://support.google.com/websearch/?p=ws_results_help&hl=en&fg=1",
+        "role": "menuitem",
+        "tabindex": "-1"
+    },
+    {
+        "type": "textarea",
+        "text": "",
+        "aria-label": "Search",
+        "class": [
+            "gLFyf"
+        ],
+        "aria-controls": "Alh6id",
+        "aria-owns": "Alh6id",
+        "autocomplete": "off",
+        "autofocus": "",
+        "title": "Search",
+        "value": "",
+        "jsaction": "paste:puy29d;",
+        "aria-autocomplete": "both",
+        "aria-expanded": "false",
+        "aria-haspopup": "false",
+        "autocapitalize": "off",
+        "autocorrect": "off",
+        "id": "APjFqb",
+        "maxlength": "2048",
+        "name": "q",
+        "role": "combobox",
+        "rows": "1",
+        "spellcheck": "false",
+        "data-ved": "0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQ39UDCA4"
+    },
+    {
+        "type": "textarea",
+        "text": "",
+        "aria-label": null,
+        "class": [
+            "csi"
+        ],
+        "name": "csi",
+        "style": "display:none"
+    },
+    {
+        "type": "input",
+        "text": "",
+        "aria-label": "Google Search",
+        "class": [
+            "gNO89b"
+        ],
+        "value": "Google Search",
+        "name": "btnK",
+        "role": "button",
+        "tabindex": "0",
+        "data-ved": "0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQ4dUDCBc"
+    },
+    {
+        "type": "input",
+        "text": "",
+        "aria-label": "I'm Feeling Lucky",
+        "class": [
+            "RNmpXc"
+        ],
+        "value": "I'm Feeling Lucky",
+        "name": "btnI",
+        "jsaction": "trigger.kWlxhc",
+        "data-ved": "0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQ19QECBg"
+    },
+    {
+        "type": "input",
+        "text": "",
+        "aria-label": "Google Search",
+        "class": [
+            "gNO89b"
+        ],
+        "value": "Google Search",
+        "name": "btnK",
+        "role": "button",
+        "tabindex": "0",
+        "data-ved": "0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQ4dUDCBs"
+    },
+    {
+        "type": "input",
+        "text": "",
+        "aria-label": "I'm Feeling Lucky",
+        "id": "gbqfbb",
+        "value": "I'm Feeling Lucky",
+        "name": "btnI",
+        "role": "button",
+        "tabindex": "0",
+        "data-ved": "0ahUKEwjb5NDNkLKEAxUble4BHYKuDQcQnRsIHA"
+    },
+    {
+        "type": "input",
+        "text": "",
+        "aria-label": null,
+        "name": "sca_esv",
+        "value": "f0d8b6dbc2182cd0"
+    },
+    {
+        "type": "input",
+        "text": "",
+        "aria-label": null,
+        "name": "source",
+        "value": "hp"
+    },
+    {
+        "type": "input",
+        "text": "",
+        "aria-label": null,
+        "value": "ioXQZdv3PJuqur8Pgt22OA",
+        "name": "ei"
+    },
+    {
+        "type": "input",
+        "text": "",
+        "aria-label": null,
+        "value": "ANes7DEAAAAAZdCTm0EWIvUmFQdT7eyygH_OIiB9j26l",
+        "name": "iflsig"
+    },
+    {
+        "type": "button",
+        "text": "",
+        "aria-label": "close",
+        "class": [
+            "pz5bj"
+        ],
+        "id": "spchx"
+    }
+]
