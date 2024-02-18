@@ -9,7 +9,7 @@ export default function Chat() {
         <Link to="/">
           <img src={logo} alt="logo" />
         </Link>
-        <div className="subheading">polaris.</div>
+        <div className="subheading">Polaris</div>
       </div>
       <div className="popular">
         <div
