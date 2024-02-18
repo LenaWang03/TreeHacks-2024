@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl
 
 
 class DOMElement(BaseModel):
@@ -10,6 +10,9 @@ class DOMElement(BaseModel):
   inner_text: Optional[str] = None
   aria_label: Optional[str] = None
   href: Optional[str] = None
+  
+class LLMGetIdsResponse(BaseModel):
+  ids: List[str] = Field(description="ids of the elements that are related to the next step")
 
 class RedirectRequest(BaseModel):
   prompt: str # requested action by the user
@@ -27,7 +30,7 @@ class GenerateNextStepRequest(BaseModel):
 
 class GenerateNextStepResponse(BaseModel):
   directions: str  # The next step the user should take to achieve their desired action
-  relevant_tag_ids: List[DOMElement]  # List of ids related to the next step and their properties
+  relevant_tag_ids: List[str]  # List of ids related to the next step and their properties
   task_complete: bool  # True when the user has completed all steps for their desired action
 
 class UnclearException(BaseModel):

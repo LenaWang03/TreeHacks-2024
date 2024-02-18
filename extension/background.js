@@ -3,10 +3,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     setTimeout(() => {
       chrome.tabs.captureVisibleTab(null, { format: "png" }, (dataUrl) => {
         // Handle the captured image here
-        console.log(dataUrl);
-        sendResponse({ status: "Screenshot taken" });
+        console.log({ dataUrl });
+        sendResponse({ status: "Screenshot taken", image_url: dataUrl });
       });
-      return true;
     }, 2000); // Indicates you wish to send a response asynchronously
+    return true;
   }
 });

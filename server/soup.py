@@ -1,8 +1,10 @@
 from bs4 import BeautifulSoup
+import json
 
 # Function to extract relevant attributes of a tag
 def extract_attributes(tag):
     attributes = {
+        "id": tag.get("gaze-id"),
         "type": tag.name,
         "text": tag.get_text(strip=True),
         "aria_label": tag.get("aria-label"),
@@ -16,7 +18,7 @@ def extract_attributes(tag):
 
     return attributes
 
-def process_html(html_content):
+def process_html(html_content) -> str:
     # Parse the HTML content with BeautifulSoup
     soup = BeautifulSoup(html_content, "html.parser")
 
@@ -34,7 +36,9 @@ def process_html(html_content):
             if attributes.get("text", None) or attributes.get("aria_label", None):
                 tag_details.append(attributes)
 
-    return tag_details
+    tag_details_string = json.dumps(tag_details)
+    
+    return tag_details_string
 
 if __name__ == "__main__":
     file_path = r"server\example_data\gmail\gmail.html"

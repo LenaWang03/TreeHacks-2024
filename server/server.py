@@ -1,4 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, Body
+from fastapi.middleware.cors import CORSMiddleware
+
 from pydantic import BaseModel
 from sympy import together
 from models import (
@@ -7,7 +9,7 @@ from models import (
     RedirectRequest,
     RedirectResponse,
 )
-from server.llm import (
+from llm import (
     get_next_step,
     get_page_description,
     get_relevant_tag_ids,
@@ -17,7 +19,17 @@ from server.llm import (
 from soup import process_html
 import uvicorn
 
+from utils import Timer
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 
 @app.get("/")
@@ -45,21 +57,31 @@ async def generate_next_step(request: GenerateNextStepRequest = Body(...)):
     """
     Receives a screenshot and details about the user's current state on the webpage and
     returns directions for the next step they should take and the related DOM elements.
-    task_complete returns True if the task has been completed
+    task_complete returns True if the task has been completed.
     """
     openai_client = load_openai_model()
     together_client = load_together_model()
 
     # Concurrently: process and filter HTML elements with beautiful soup into JSON with important information
-    elements = process_html(request.html)
+    with Timer() as t:
+        elements = process_html(request.html)
+    print(f"Processing HTML: {t.interval} seconds")
 
     # Use OpenAI (vision) to generate overall description of the user's page and UI components
-    page_description = get_page_description(openai_client, request.image_url)
+    with Timer() as t:
+        # page_description = get_page_description(openai_client, request.image_url)
+        page_description = "You are on the Google home page. There is a searchbar in the middle of the screen and two buttons below it."
+    print(f"Getting page description: {t.interval} seconds")
 
     # Use together.ai (?) LLM with created prompt to generate: (1) directions for next step, (2) the components that are related to that direction
-    next_step = get_next_step(together_client, request.prompt, page_description)
-    relevant_tag_ids = get_relevant_tag_ids(together_client, elements)
+    with Timer() as t:
+        next_step = get_next_step(together_client, request.prompt, page_description)
+    print(f"Getting next step: {t.interval} seconds")
 
+    with Timer() as t:
+        relevant_tag_ids = get_relevant_tag_ids(together_client, elements)
+    print(f"Getting relevant tag IDs: {t.interval} seconds")
+    
     return {
         "directions": next_step,
         "relevant_tag_ids": relevant_tag_ids,

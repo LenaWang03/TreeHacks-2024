@@ -1,5 +1,39 @@
+const API_URL = "http://localhost:8000";
+
+sessionStorage.setItem("highlightedElementIds", []);
+
+sessionStorage.setItem(
+  "generateNextStepParams",
+  JSON.stringify({
+    image_url: "",
+    previous_steps: [],
+    prompt: "I want to see photos of my son.",
+    html: "",
+  })
+);
+
 chrome.runtime.sendMessage({ action: "captureTab" }, (response) => {
-  console.log("Screenshot taken");
+  if (chrome.runtime.lastError) {
+    // Handle error
+    console.error(chrome.runtime.lastError.message);
+    return;
+  }
+
+  if (response) {
+    // When getting and updating the object:
+    let generateNextStepParams = JSON.parse(
+      sessionStorage.getItem("generateNextStepParams") || "{}"
+    );
+    console.log({ response });
+    generateNextStepParams.image_url = response.image_url;
+    sessionStorage.setItem(
+      "generateNextStepParams",
+      JSON.stringify(generateNextStepParams)
+    );
+  } else {
+    // Handle the case where response might be undefined
+    console.log("No response received");
+  }
 });
 
 const tags = ["gaze-10", "gaze-14", "gaze-19"];
@@ -15,22 +49,34 @@ function sendHTML() {
 
   const serializedHtml = new XMLSerializer().serializeToString(document);
   console.log(serializedHtml);
-  // const url = 'YOUR_BACKEND_ENDPOINT'; // Replace with your actual backend endpoint
 
-  //   fetch(url, {
-  //       method: 'POST',
-  //       headers: {
-  //           'Content-Type': 'application/json',
-  //       },.
-  //       body: JSON.stringify({ html: serializedHtml }),
-  //   })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //       console.log('Success:', data);
-  //   })
-  //   .catch((error) => {
-  //       console.error('Error:', error);
-  //   });
+  let generateNextStepParams = JSON.parse(
+    sessionStorage.getItem("generateNextStepParams") || {}
+  );
+  generateNextStepParams["html"] = serializedHtml;
+  sessionStorage.setItem(
+    "generateNextStepParams",
+    JSON.stringify(generateNextStepParams)
+  );
+
+  const url = `${API_URL}/generate-next-step`; // Replace with your actual backend endpoint
+
+  console.log({ generateNextStepParams });
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(generateNextStepParams),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
 
 function addOverlay(tags) {
@@ -59,65 +105,65 @@ function addOverlay(tags) {
   const elementRects = [];
 
   // Draw the overlay and the hole
-  function drawOverlay(tags) {
-    // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // function drawOverlay(tags) {
+  //   // Clear the canvas
+  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw the semi-transparent black overlay
-    ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  //   // Draw the semi-transparent black overlay
+  //   ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
+  //   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    function clearHoleForElement(element) {
-      if (element) {
-        const rect = element.getBoundingClientRect();
-        ctx.clearRect(rect.left, rect.top, rect.width, rect.height);
-        elementRects.push([rect, element]);
-      }
-    }
+  //   function clearHoleForElement(element) {
+  //     if (element) {
+  //       const rect = element.getBoundingClientRect();
+  //       ctx.clearRect(rect.left, rect.top, rect.width, rect.height);
+  //       elementRects.push([rect, element]);
+  //     }
+  //   }
 
-    // Locate the first anchor tag and get its position and dimensions
-    tags.forEach((tag) => {
-      const element = document.querySelector(`[gaze-id="${tag}"]`);
-      clearHoleForElement(element);
-    });
-  }
+  //   // Locate the first anchor tag and get its position and dimensions
+  //   tags.forEach((tag) => {
+  //     const element = document.querySelector(`[gaze-id="${tag}"]`);
+  //     clearHoleForElement(element);
+  //   });
+  // }
 
-  drawOverlay(tags);
+  // drawOverlay(tags);
 
-  // Add the canvas to the body
-  document.body.appendChild(canvas);
+  // // Add the canvas to the body
+  // document.body.appendChild(canvas);
 
-  // Adjust the overlay when the user scrolls or resizes the window
-  const adjustOverlay = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    drawOverlay(tags); // Redraw the overlay and hole
-  };
+  // // Adjust the overlay when the user scrolls or resizes the window
+  // const adjustOverlay = () => {
+  //   canvas.width = window.innerWidth;
+  //   canvas.height = window.innerHeight;
+  //   drawOverlay(tags); // Redraw the overlay and hole
+  // };
 
-  window.addEventListener("resize", adjustOverlay);
-  window.addEventListener("scroll", adjustOverlay);
+  // window.addEventListener("resize", adjustOverlay);
+  // window.addEventListener("scroll", adjustOverlay);
 
-  // Listen for mouse movement to change the cursor style when hovering over the hole
+  // // Listen for mouse movement to change the cursor style when hovering over the hole
 
-  // Mouse move event to change cursor style
-  canvas.addEventListener("mousemove", (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
-    const isOverHole = elementRects.some((arr) => isPointInHole(x, y, arr[0]));
-    canvas.style.cursor = isOverHole ? "pointer" : "default";
-  });
+  // // Mouse move event to change cursor style
+  // canvas.addEventListener("mousemove", (e) => {
+  //   const x = e.clientX;
+  //   const y = e.clientY;
+  //   const isOverHole = elementRects.some((arr) => isPointInHole(x, y, arr[0]));
+  //   canvas.style.cursor = isOverHole ? "pointer" : "default";
+  // });
 
-  // Click event to trigger click on underlying element
-  canvas.addEventListener("click", (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
-    elementRects.forEach((arr) => {
-      if (isPointInHole(x, y, arr[0])) {
-        arr[1].click();
-      }
-    });
-  });
+  // // Click event to trigger click on underlying element
+  // canvas.addEventListener("click", (e) => {
+  //   const x = e.clientX;
+  //   const y = e.clientY;
+  //   elementRects.forEach((arr) => {
+  //     if (isPointInHole(x, y, arr[0])) {
+  //       arr[1].click();
+  //     }
+  //   });
+  // });
 }
 
-sendHTML();
+setTimeout(sendHTML, 5000);
 addOverlay(tags);

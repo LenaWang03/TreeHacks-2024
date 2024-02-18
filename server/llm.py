@@ -1,6 +1,9 @@
+from typing import List
 from dotenv import load_dotenv
 from openai import OpenAI
 import os
+import json
+from models import LLMGetIdsResponse
 from soup import process_html
 
 from utils import Timer, scale_image
@@ -110,7 +113,7 @@ def get_next_step(client: OpenAI, desired_action: str, page_description: str) ->
     return chat_completion.choices[0].message.content
 
 
-def get_relevant_tag_ids(client: OpenAI, tags: str) -> str:
+def get_relevant_tag_ids(client: OpenAI, tags: str) -> List[str]:
     # Take in the directions for the next step (a list of steps, returned by Dylan's code),
     # the JSON object of relevant tags, and the textual representation of the screenshot
     # Pending addition of ids to HTML tags
@@ -130,12 +133,18 @@ def get_relevant_tag_ids(client: OpenAI, tags: str) -> str:
                 "content": prompt,
             }
         ],
-        model="mistralai/Mixtral-8x7B-Instruct-v0.1",
+        response_format={
+            "type": "json_object",
+            "schema": LLMGetIdsResponse.model_json_schema(),
+        },
+        model="togethercomputer/CodeLlama-34b-Instruct",
         max_tokens=100,
     )
-
-    relevant_tag_ids = chat_completion.choices[0].message.content
-    relevant_tag_ids = relevant_tag_ids.strip("][").split(", ")
+    
+    print(chat_completion.choices[0].message.content)
+    response = json.loads(chat_completion.choices[0].message.content)
+    relevant_tag_ids = response.get("ids", [])
+    
     return relevant_tag_ids
 
 
