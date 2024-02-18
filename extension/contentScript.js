@@ -1,9 +1,3 @@
-chrome.runtime.sendMessage({ action: "captureTab" }, (response) => {
-  console.log("Screenshot taken");
-});
-
-const tags = ["gaze-10", "gaze-14", "gaze-19"];
-
 function sendHTML() {
   // Select all relevant elements
   const elements = document.querySelectorAll("a, input, button, textarea");
@@ -55,13 +49,14 @@ function addOverlay(tags) {
       y < rect.top + rect.height
     );
   }
-
-  const elementRects = [];
+  
+  let elementRects = [];
 
   // Draw the overlay and the hole
   function drawOverlay(tags) {
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    elementRects = [];
 
     // Draw the semi-transparent black overlay
     ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
@@ -119,5 +114,21 @@ function addOverlay(tags) {
   });
 }
 
-sendHTML();
-addOverlay(tags);
+function sleep(time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+const tags = ["gaze-10", "gaze-14", "gaze-19"];
+const urlParams = new URLSearchParams(window.location.search);
+const isEnabled = urlParams.get("gazeEnabled");
+
+if (isEnabled === "true") {
+  (async () => {
+    await sleep(3000);
+    chrome.runtime.sendMessage({ action: "captureTab" }, (response) => {
+      console.log("Screenshot taken");
+    });
+    sendHTML();
+    addOverlay(tags);
+  })();
+}
