@@ -1,0 +1,37 @@
+input {
+    outline: none;
+    width: 100%;
+    font-size: 20px;
+    border: none;
+}
+
+.input-container {
+    width: 100%;
+    font-size: 16px;
+    padding-left: 10px;
+    border: 4px solid #0057FF;
+    border-radius: 50px;
+    margin: 10px 0;
+    color: #0057FF;
+    font-weight: 600;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 50px;
+}
+
+.enterButton {
+    background-color: #0057FF;
+    color: white;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    padding: 10px 30px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

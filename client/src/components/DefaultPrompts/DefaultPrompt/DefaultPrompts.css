@@ -1,6 +1,6 @@
 .prompt-group {
   display: flex;
-  width: 33%;
+  width: 100%;
   height: 30vh;
   flex-wrap: wrap;
   justify-content: space-around;

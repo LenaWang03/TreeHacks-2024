@@ -1,13 +1,28 @@
 .prompt-text {
   font-size: 20px;
   font-family: sans-serif;
-  padding-top: 10px;
-  text-align: center;
+  padding: 10px;
+  margin: 0;
 }
 
 .prompt-box {
-  width: 160px;
-  height: 90px;
-  background-color: rgb(223, 222, 222);
+  background-color: #0057FF;
   border-radius: 16px;
+  width: calc(50% - 60px); /* Adjust as needed */
+  margin-bottom: 20px; /* Adjust spacing between items */
+  color: white;
+  display: flex;
+  justify-content: left;
+  padding: 20px;
+  flex-direction: column;
+}
+
+h1 {
+  margin: 0;
+}
+
+.promptTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
