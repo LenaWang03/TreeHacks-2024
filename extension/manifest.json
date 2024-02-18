@@ -4,7 +4,7 @@
   "version": "1.0",
   "description": "Injects a canvas overlay with a transparent hole in the middle.",
   "host_permissions": ["<all_urls>"],
-  "permissions": ["activeTab", "tabs"],
+  "permissions": ["activeTab", "tabs", "storage"],
   "action": {
     "default_icon": "hello_extensions.png",
     "default_popup": "index.html"
