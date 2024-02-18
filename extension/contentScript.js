@@ -1,45 +1,124 @@
-function sendHTML() {
-  // Select all relevant elements
-  const elements = document.querySelectorAll("a, input, button, textarea");
+const API_URL = "http://localhost:8000";
 
-  // Assign a unique "gaze-id" to each element
-  elements.forEach((element, index) => {
-    element.setAttribute("gaze-id", `gaze-${index + 1}`);
-  });
-
-  const serializedHtml = new XMLSerializer().serializeToString(document);
-  console.log(serializedHtml);
-
-  let generateNextStepParams = JSON.parse(
-    sessionStorage.getItem("generateNextStepParams") || {}
-  );
-  generateNextStepParams["html"] = serializedHtml;
-  sessionStorage.setItem(
-    "generateNextStepParams",
-    JSON.stringify(generateNextStepParams)
-  );
-
-  const url = `${API_URL}/generate-next-step`; // Replace with your actual backend endpoint
-
-  console.log({ generateNextStepParams });
-
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(generateNextStepParams),
+// Initial setup for session storage (remains unchanged)
+sessionStorage.setItem("highlightedElementIds", JSON.stringify([]));
+sessionStorage.setItem("completedSteps", JSON.stringify([]));
+sessionStorage.setItem("currentStep", JSON.stringify(""));
+sessionStorage.setItem("taskDone", JSON.stringify(false));
+sessionStorage.setItem(
+  "generateNextStepParams",
+  JSON.stringify({
+    previous_steps: [],
+    prompt: "I want to book a flight.",
+    html: "",
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
+);
+
+// Modified sendHTML function
+function sendHTML() {
+  return new Promise((resolve, reject) => {
+    const elements = document.querySelectorAll("a, input, button, textarea");
+    elements.forEach((element, index) => {
+      element.setAttribute("gaze-id", `gaze-${index + 1}`);
     });
+
+    const serializedHtml = new XMLSerializer().serializeToString(document);
+    let generateNextStepParams = JSON.parse(
+      sessionStorage.getItem("generateNextStepParams") || "{}"
+    );
+    generateNextStepParams["html"] = serializedHtml;
+    sessionStorage.setItem(
+      "generateNextStepParams",
+      JSON.stringify(generateNextStepParams)
+    );
+
+    const url = `${API_URL}/generate-next-step`;
+    console.log({ generateNextStepParams });
+
+    resolve();
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(generateNextStepParams),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        if (
+          JSON.stringify(data["directions"]) !==
+            sessionStorage.getItem("currentStep") ||
+          JSON.stringify(data["task_complete"]) !==
+            sessionStorage.getItem("taskDone")
+        ) {
+          sessionStorage.setItem(
+            "currentStep",
+            JSON.stringify(data["directions"])
+          );
+          sessionStorage.setItem(
+            "taskDone",
+            JSON.stringify(data["task_complete"])
+          );
+          sessionStorage.setItem(
+            "generateNextStepParams",
+            JSON.stringify(data["relevant_tag_ids"])
+          );
+          resolve(); // Only resolve when session storage is updated with new data
+        } else {
+          reject("No update required"); // Reject promise if no changes are necessary
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        reject(error);
+      });
+  });
 }
 
-function addOverlay(tags) {
+// Utility to manage event listeners to avoid duplication
+const elementEventListeners = {};
+
+// Function to clear event listeners to prevent duplication
+function clearEventListeners() {
+  Object.entries(elementEventListeners).forEach(
+    ([key, { element, event, listener }]) => {
+      element.removeEventListener(event, listener);
+      delete elementEventListeners[key]; // Remove the reference after removing the listener
+    }
+  );
+}
+
+// Function to add an event listener and keep track of it to avoid duplication
+function addEventListenerWithKey(element, event, listener, key) {
+  if (elementEventListeners[key]) {
+    // If the listener already exists, first remove it
+    const {
+      element: storedElement,
+      event: storedEvent,
+      listener: storedListener,
+    } = elementEventListeners[key];
+    storedElement.removeEventListener(storedEvent, storedListener);
+  }
+  element.addEventListener(event, listener);
+  elementEventListeners[key] = { element, event, listener }; // Store the new listener
+}
+
+// Adjustments to addOverlay function (mainly event listener handling)
+function addOverlay() {
+  clearEventListeners(); // Clear previous event listeners to prevent duplication
+
+  const tags = ["gaze-3", "gaze-10", "gaze-20", "gaze-30"];
+  const taskDone = JSON.parse(sessionStorage.getItem("taskDone") || "false");
+
+  if (taskDone) {
+    // Implement task completion logic here
+    return;
+  }
+
+  if (!tags.length) return;
+
   // Create the canvas element
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -61,7 +140,7 @@ function addOverlay(tags) {
       y < rect.top + rect.height
     );
   }
-  
+
   let elementRects = [];
 
   // Draw the overlay and the hole
@@ -69,79 +148,89 @@ function addOverlay(tags) {
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     elementRects = [];
+
+    // Draw the semi-transparent black overlay
+    ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    function clearHoleForElement(element) {
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        ctx.clearRect(rect.left, rect.top, rect.width, rect.height);
+        elementRects.push([rect, element]);
+      }
+    }
+
+    // Locate the first anchor tag and get its position and dimensions
+    tags.forEach((tag) => {
+      const element = document.querySelector(`[gaze-id="${tag}"]`);
+      if (!element) {
+        console.warn(`Element with gaze-id="${tag}" not found.`);
+        return;
+      }
+
+      const tagType = element.tagName;
+      const event = tagType === "BUTTON" || tagType === "A" ? "click" : "input"; // Corrected to handle input elements properly
+      const key = `event-${tag}`;
+
+      const onInteraction = (e) => {
+        // Interaction logic remains unchanged
+      };
+
+      addEventListenerWithKey(element, event, onInteraction, key);
+
+      // Add a yellow 3px border to the element and clear a hole for it in the overlay
+      element.style.border = "3px solid yellow";
+
+      clearHoleForElement(element);
+    });
   }
-  
-  //   // Draw the semi-transparent black overlay
-  //   ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
-  //   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  //   function clearHoleForElement(element) {
-  //     if (element) {
-  //       const rect = element.getBoundingClientRect();
-  //       ctx.clearRect(rect.left, rect.top, rect.width, rect.height);
-  //       elementRects.push([rect, element]);
-  //     }
-  //   }
+  drawOverlay(tags);
 
-  //   // Locate the first anchor tag and get its position and dimensions
-  //   tags.forEach((tag) => {
-  //     const element = document.querySelector(`[gaze-id="${tag}"]`);
-  //     clearHoleForElement(element);
-  //   });
-  // }
+  // Add the canvas to the body
+  document.body.appendChild(canvas);
 
-  // drawOverlay(tags);
+  // Adjust the overlay when the user scrolls or resizes the window
+  const adjustOverlay = () => {
+    canvas.width = window.innerWidth;
+    f;
+    canvas.height = window.innerHeight;
+    drawOverlay(tags); // Redraw the overlay and hole
+  };
 
-  // // Add the canvas to the body
-  // document.body.appendChild(canvas);
+  window.addEventListener("resize", adjustOverlay);
+  window.addEventListener("scroll", adjustOverlay);
 
-  // // Adjust the overlay when the user scrolls or resizes the window
-  // const adjustOverlay = () => {
-  //   canvas.width = window.innerWidth;
-  //   canvas.height = window.innerHeight;
-  //   drawOverlay(tags); // Redraw the overlay and hole
-  // };
+  // Mouse move event to change cursor style
+  canvas.addEventListener("mousemove", (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    const isOverHole = elementRects.some((arr) => isPointInHole(x, y, arr[0]));
+    canvas.style.cursor = isOverHole ? "pointer" : "default";
+  });
 
-  // window.addEventListener("resize", adjustOverlay);
-  // window.addEventListener("scroll", adjustOverlay);
-
-  // // Listen for mouse movement to change the cursor style when hovering over the hole
-
-  // // Mouse move event to change cursor style
-  // canvas.addEventListener("mousemove", (e) => {
-  //   const x = e.clientX;
-  //   const y = e.clientY;
-  //   const isOverHole = elementRects.some((arr) => isPointInHole(x, y, arr[0]));
-  //   canvas.style.cursor = isOverHole ? "pointer" : "default";
-  // });
-
-  // // Click event to trigger click on underlying element
-  // canvas.addEventListener("click", (e) => {
-  //   const x = e.clientX;
-  //   const y = e.clientY;
-  //   elementRects.forEach((arr) => {
-  //     if (isPointInHole(x, y, arr[0])) {
-  //       arr[1].click();
-  //     }
-  //   });
-  // });
+  // Click event to trigger click on underlying element
+  canvas.addEventListener("click", (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    elementRects.forEach((arr) => {
+      if (isPointInHole(x, y, arr[0])) {
+        arr[1].click();
+      }
+    });
+  });
 }
 
-function sleep(time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
+const updateOverlay = async () => {
+  await sendHTML(); // Wait for sendHTML to complete
+  addOverlay(); // Then call addOverlay
+};
 
-const tags = ["gaze-10", "gaze-14", "gaze-19"];
 const urlParams = new URLSearchParams(window.location.search);
 const isEnabled = urlParams.get("gazeEnabled");
 
-if (isEnabled === "true") {
-  (async () => {
-    await sleep(3000);
-    chrome.runtime.sendMessage({ action: "captureTab" }, (response) => {
-      console.log("Screenshot taken");
-    });
-    sendHTML();
-    addOverlay(tags);
-  })();
+if (isEnabled !== "false") {
+  console.log("updating overlay...");
+  updateOverlay();
 }
