@@ -43,7 +43,7 @@ export default function Search() {
         <Link to="/">
           <img src={logo} alt="logo" />
         </Link>
-        <div className="subheading">gaze.</div>
+        <div className="subheading">polaris.</div>
       </div>
       <div className="center">
         <div className="search">
@@ -58,7 +58,6 @@ export default function Search() {
     </div>
   );
 }
-
 
 /*
 

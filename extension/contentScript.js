@@ -262,7 +262,7 @@ const tags = [
   "x1a2a7pz x1qjc9v5 xnwf7zb x40j3uw x1s7lred x15gyhx8 x9f619 x78zum5 x1fns5xo x1n2onr6 xh8yej3 x1ba4aug xmjcpbm",
 ];
 const urlParams = new URLSearchParams(window.location.search);
-const isEnabled = urlParams.get("gazeEnabled");
+const isEnabled = urlParams.get("polarisEnabled");
 
 if (isEnabled === "true") {
   addOverlay(tags, 1, "Click the search bar to get started!");

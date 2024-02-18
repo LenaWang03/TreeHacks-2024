@@ -13,7 +13,7 @@ export default function DefaultPrompt({
     <div
       className="prompt-box"
       onClick={() => {
-        const url = `https://www.facebook.com?gazeEnabled=true`;
+        const url = `https://www.facebook.com?polarisEnabled=true`;
         window.open(url, "_blank");
       }}
     >
