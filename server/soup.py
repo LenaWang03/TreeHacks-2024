@@ -1,5 +1,8 @@
-from bs4 import BeautifulSoup
 import json
+import os
+
+from bs4 import BeautifulSoup
+
 
 # Function to extract relevant attributes of a tag
 def extract_attributes(tag):
@@ -41,7 +44,7 @@ def process_html(html_content) -> str:
     return tag_details_string
 
 if __name__ == "__main__":
-    file_path = r"server\example_data\gmail\gmail.html"
+    file_path = os.path.join("server", "example_data", "gmail", "gmail.html")
     
     with open(file_path, "r", encoding="utf-8") as file:
         html_content = file.read()

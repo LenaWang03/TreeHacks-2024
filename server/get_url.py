@@ -17,6 +17,3 @@ def get_url(prompt: str):
     url = response.choices[0].message.content
 
     return url
-
-def refine_prompt(prompt: str):
-    return prompt

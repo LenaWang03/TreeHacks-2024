@@ -1,9 +1,11 @@
-from PIL import Image
-import requests
-from io import BytesIO
 import base64
-import time
 import binascii
+import time
+from io import BytesIO
+
+import requests
+from PIL import Image
+
 
 class Timer:
     def __enter__(self):

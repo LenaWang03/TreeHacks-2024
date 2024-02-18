@@ -1,10 +1,11 @@
 import json
+import os
+
+from load_ai_clients import load_openai_client, load_together_client
 from models import LLMGetIdsResponse
 from soup import process_html
-
 from utils import Timer, scale_image
 
-from server.load_ai_clients import load_together_client, load_openai_client
 
 def get_page_description(encoded_url: str) -> str:
     client = load_openai_client()
@@ -49,8 +50,8 @@ def get_page_description_from_url(url: str) -> str:
     return chat_completion.choices[0].message.content
 
 
-def get_next_step(desired_action: str, page_description: str) -> str:
-    client = load_openai_client()
+def get_next_step(desired_action: str, tag_details_string: str) -> str:
+    client = load_together_client()
     prompt = f"""
     <s>[INST] You are a helpful code assistant who helps users navigate the web. Your task is to generate the next task the user should perform based on their desired action and a description of the page they're looking at. So for instance based on the following:
     desired action: I want to see the pictures of my friend Gordon Cheung.
@@ -76,7 +77,7 @@ def get_next_step(desired_action: str, page_description: str) -> str:
     </s>
     [INST]
     desired action: {desired_action}
-    page description: {page_description}
+    relevant HTML tags' details: {tag_details_string}
     [/INST]
     """
 
@@ -96,8 +97,6 @@ def get_next_step(desired_action: str, page_description: str) -> str:
 
 def get_relevant_tag_ids(tags: str) -> str:
     client = load_openai_client()
-    # Take in the directions for the next step (a list of steps, returned by Dylan's code),
-    # the JSON object of relevant tags, and the textual representation of the screenshot
     # Pending addition of ids to HTML tags
     next_step = 'Click the "Compose" button to start writing an email.'
     prompt = (
@@ -134,25 +133,28 @@ if __name__ == "__main__":
     together_client = load_together_client()
     openai_client = load_openai_client()
 
-    img_encoded_path = r"server\example_data\encoded_img.txt"
+    # img_encoded_path = r"server\example_data\encoded_img.txt"
 
-    with open(img_encoded_path, "r", encoding="utf-8") as file:
-        # Read the entire content of the file into a string
-        file_content = file.read()
+    # with open(img_encoded_path, "r", encoding="utf-8") as file:
+    #     # Read the entire content of the file into a string
+    #     file_content = file.read()
 
-    with Timer() as t:
-        description = get_page_description(openai_client, file_content)
-    print(f"description: {t.interval}")
+    # with Timer() as t:
+    #     description = get_page_description(openai_client, file_content)
+    # print(f"description: {t.interval}")
+    file_path = os.path.join("server", "example_data", "gmail", "gmail.html")
+    
+    with open(file_path, "r", encoding="utf-8") as file:
+        html_content = file.read()
+    tag_details_string = process_html(html_content)
 
     with Timer() as t:
         next_step = get_next_step(
             together_client,
-            description,
-            "I want to search for a post about using OpenAI's API.",
+            tag_details_string,
         )
     print(f"next step: {t.interval}")
 
-    print(f"description: {description}")
     print(f"returns: {next_step}")
 
     # Placeholder

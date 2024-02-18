@@ -1,25 +1,14 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Body
-from fastapi.middleware.cors import CORSMiddleware
-
-from get_url import get_url, refine_prompt
-from pydantic import BaseModel
-from sympy import together
-from models import (
-    GenerateNextStepRequest,
-    GenerateNextStepResponse,
-    RedirectRequest,
-    RedirectResponse,
-)
-from llm import (
-    get_next_step,
-    get_page_description,
-    get_relevant_tag_ids,
-    load_openai_model,
-    load_together_model,
-)
-from soup import process_html
 import uvicorn
-
+from fastapi import Body, FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from get_url import get_url, refine_prompt
+from llm import (get_next_step, get_page_description, get_relevant_tag_ids,
+                 load_openai_model, load_together_model)
+from models import (GenerateNextStepRequest, GenerateNextStepResponse,
+                    RedirectRequest, RedirectResponse)
+from pydantic import BaseModel
+from soup import process_html
+from sympy import together
 from utils import Timer
 
 app = FastAPI()
@@ -51,8 +40,7 @@ async def redirect(request: RedirectRequest):
     """
     if request.url is None:
         url = get_url(request.prompt)
-        refined_prompt = refine_prompt(request.prompt)
-        response = {"url": url, "prompt": RedirectRequest(refined_prompt, url)}
+        response = {"url": url, "prompt": RedirectRequest(request.prompt, url)}
     return response
 
 
