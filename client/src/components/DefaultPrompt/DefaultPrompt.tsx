@@ -10,17 +10,23 @@ export default function DefaultPrompt({
   icon: any;
 }) {
   return (
-    <div className="prompt-box">
+    <div
+      className="prompt-box"
+      onClick={() => {
+        const url = `https://www.facebook.com?polarisEnabled=true`;
+        window.open(url, "_blank");
+      }}
+    >
       <div className="prompt-text">
         <div className="promptTitle">
-          <h1
-            style={{ padding: "0px", fontSize: "25px" }}
-          >
-            {prompt}
-          </h1>
-          <div className="promptIcon" style={{ fontSize: "30px" }}>{icon}</div>
+          <h1 style={{ padding: "0px", fontSize: "25px" }}>{prompt}</h1>
+          <div className="promptIcon" style={{ fontSize: "30px" }}>
+            {icon}
+          </div>
         </div>
-        <div style={{paddingTop:"20px", fontWeight:"300"}}>{description}</div>
+        <div style={{ paddingTop: "20px", fontWeight: "300" }}>
+          {description}
+        </div>
       </div>
     </div>
   );

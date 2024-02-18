@@ -21,6 +21,14 @@ body {
   flex-direction: column;
 }
 
+.ex {
+  font-size: 40px;
+  color: #0057FF;
+  float: right;
+  margin-bottom: -20px;
+  cursor: pointer;
+}
+
 .popular {
   padding: 150px;
   padding-top: 0;

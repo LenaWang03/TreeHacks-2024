@@ -1,5 +1,5 @@
 import "./ChatInput.css";
-import { FaArrowRight, FaMicrophone, FaSearch } from "react-icons/fa";
+import { FaMicrophone, FaSearch } from "react-icons/fa";
 
 export default function ChatInput() {
   return (

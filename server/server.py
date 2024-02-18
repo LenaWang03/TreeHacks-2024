@@ -1,15 +1,12 @@
 import uvicorn
-from fastapi import Body, FastAPI, File, HTTPException, UploadFile
+from fastapi import Body, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from get_url import get_url, refine_prompt
-from llm import (get_next_step, get_page_description, get_relevant_tag_ids,
-                 load_openai_model, load_together_model)
+from get_url import get_url
 from models import (GenerateNextStepRequest, GenerateNextStepResponse,
                     RedirectRequest, RedirectResponse)
-from pydantic import BaseModel
-from soup import process_html
-from sympy import together
-from utils import Timer
+from next_step import get_next_step, get_relevant_tag_ids
+from soup import get_tag_details
+from task_complete import is_complete
 
 app = FastAPI()
 
@@ -47,32 +44,25 @@ async def redirect(request: RedirectRequest):
 @app.post("/generate-next-step/", response_model=GenerateNextStepResponse)
 async def generate_next_step(request: GenerateNextStepRequest = Body(...)):
     """
-    Receives a screenshot and details about the user's current state on the webpage and
-    returns directions for the next step they should take and the related DOM elements.
+    Receives details about the user's current state on the webpage and returns 
+    directions for the next step they should take and the related DOM elements.
     task_complete returns True if the task has been completed.
     """
-    openai_client = load_openai_model()
-    together_client = load_together_model()
+    # LLM call to determine if task is complete. It is complete if the prompt can be answered by looking on the current page (HTML)
+    task_complete = is_complete(request.prompt, request.html)
 
-    # Concurrently: process and filter HTML elements with beautiful soup into JSON with important information
-    with Timer() as t:
-        elements = process_html(request.html)
-    print(f"Processing HTML: {t.interval} seconds")
+    if task_complete:
+        return {
+            "directions": None,
+            "relevant_tag_ids": None,
+            "task_complete": True,
+        }
 
-    # Use OpenAI (vision) to generate overall description of the user's page and UI components
-    with Timer() as t:
-        # page_description = get_page_description(openai_client, request.image_url)
-        page_description = "You are on the Google home page. There is a searchbar in the middle of the screen and two buttons below it."
-    print(f"Getting page description: {t.interval} seconds")
-
-    # Use together.ai (?) LLM with created prompt to generate: (1) directions for next step, (2) the components that are related to that direction
-    with Timer() as t:
-        next_step = get_next_step(together_client, request.prompt, page_description)
-    print(f"Getting next step: {t.interval} seconds")
-
-    with Timer() as t:
-        relevant_tag_ids = get_relevant_tag_ids(together_client, elements)
-    print(f"Getting relevant tag IDs: {t.interval} seconds")
+    # get_next_step uses no knowledge of the HTML of the page and just returns the logical next step
+    next_step = get_next_step(request.previous_steps, request.prompt)
+    # get_relevant_tag_ids finds the relevant tag ids based on the generated next step and the HTML of the page
+    tag_details = get_tag_details(request.html)
+    relevant_tag_ids = get_relevant_tag_ids(next_step, tag_details)
     
     return {
         "directions": next_step,

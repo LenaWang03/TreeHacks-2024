@@ -6,7 +6,7 @@
 }
 
 .prompt-box {
-  background-color: #0057FF;
+  background-color: #0057ff;
   border-radius: 16px;
   width: calc(50% - 60px); /* Adjust as needed */
   margin-bottom: 20px; /* Adjust spacing between items */
@@ -15,6 +15,10 @@
   justify-content: left;
   padding: 20px;
   flex-direction: column;
+}
+
+.prompt-box:hover {
+  cursor: pointer;
 }
 
 h1 {
