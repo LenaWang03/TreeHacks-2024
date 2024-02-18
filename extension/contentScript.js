@@ -2,20 +2,17 @@ function clearOverlay() {
   // Remove the canvas from the DOM
   const canvas = document.querySelector("canvas");
   if (canvas) {
-    canvas.parentNode.removeChild(canvas);
+    canvas.remove();
   }
 
   // Remove the tooltip from the DOM
   const tooltip = document.getElementById("gazeTooltip");
   if (tooltip) {
-    tooltip.parentNode.removeChild(tooltip);
+    tooltip.remove();
   }
 }
 
 function addOverlay(tags, stepNumber, text) {
-  if (stepNumber === null) {
-    return;
-  }
   // Create the canvas element
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -202,6 +199,15 @@ function addOverlay(tags, stepNumber, text) {
   window.addEventListener("scroll", adjustOverlay);
 
   window.addEventListener("keypress", handleKeyPress);
+
+  if (stepNumber === null) {
+    console.log("running...");
+    clearOverlay();
+    window.removeEventListener("resize", adjustOverlay);
+    window.removeEventListener("scroll", adjustOverlay);
+    window.removeEventListener("keypress", handleKeyPress);
+    return;
+  }
   // Mouse move event to change cursor style
   canvas.addEventListener("mousemove", (e) => {
     const x = e.clientX;
@@ -233,7 +239,7 @@ function addOverlay(tags, stepNumber, text) {
             [
               "x6s0dn4 x9f619 x78zum5 x2lah0s x1hshjfz x1n2onr6 xng8ra x1pi30zi x1swvt13",
             ],
-            4,
+            null,
             "Click on 'Photos'"
           );
         } else if (stepNumber === 4) {
