@@ -1,0 +1,45 @@
+.card {
+    border-radius: 20px;
+    background-color: white;
+    height: 400px;
+    width: 300px;
+    text-align: center;
+}
+
+.card p {
+    padding: 0 20px;
+}
+
+h2 {
+    margin-top: 50px;
+    color: #0057FF;
+}
+
+.stepNumber {
+    position: relative;
+    padding-top: 120px;
+    font-size: 60px;
+    font-weight: 800;
+    color: #0057FF;
+    /* background-image: url('../../imgs/star.svg');
+    background-repeat: no-repeat;
+    background-position: center; */
+    background-size: 150px;
+    margin-bottom: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+.stepNumber p {
+    position: absolute;
+    z-index: 4;
+    color: white;
+}
+
+.stepNumber img {
+    position: absolute;
+    z-index: 1;
+    width: 130px;
+}

@@ -49,7 +49,7 @@ function addOverlay(tags) {
       y < rect.top + rect.height
     );
   }
-
+  
   let elementRects = [];
 
   // Draw the overlay and the hole
