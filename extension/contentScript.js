@@ -1,43 +1,3 @@
-const API_URL = "http://localhost:8000";
-
-sessionStorage.setItem("highlightedElementIds", []);
-
-sessionStorage.setItem(
-  "generateNextStepParams",
-  JSON.stringify({
-    image_url: "",
-    previous_steps: [],
-    prompt: "I want to see photos of my son.",
-    html: "",
-  })
-);
-
-chrome.runtime.sendMessage({ action: "captureTab" }, (response) => {
-  if (chrome.runtime.lastError) {
-    // Handle error
-    console.error(chrome.runtime.lastError.message);
-    return;
-  }
-
-  if (response) {
-    // When getting and updating the object:
-    let generateNextStepParams = JSON.parse(
-      sessionStorage.getItem("generateNextStepParams") || "{}"
-    );
-    console.log({ response });
-    generateNextStepParams.image_url = response.image_url;
-    sessionStorage.setItem(
-      "generateNextStepParams",
-      JSON.stringify(generateNextStepParams)
-    );
-  } else {
-    // Handle the case where response might be undefined
-    console.log("No response received");
-  }
-});
-
-const tags = ["gaze-10", "gaze-14", "gaze-19"];
-
 function sendHTML() {
   // Select all relevant elements
   const elements = document.querySelectorAll("a, input, button, textarea");
@@ -101,13 +61,14 @@ function addOverlay(tags) {
       y < rect.top + rect.height
     );
   }
-
-  const elementRects = [];
+  
+  let elementRects = [];
 
   // Draw the overlay and the hole
-  // function drawOverlay(tags) {
-  //   // Clear the canvas
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  function drawOverlay(tags) {
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    elementRects = [];
 
   //   // Draw the semi-transparent black overlay
   //   ctx.fillStyle = "rgba(0, 0, 0, 0.75)"; // 75% opacity black
@@ -165,5 +126,21 @@ function addOverlay(tags) {
   // });
 }
 
-setTimeout(sendHTML, 5000);
-addOverlay(tags);
+function sleep(time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+const tags = ["gaze-10", "gaze-14", "gaze-19"];
+const urlParams = new URLSearchParams(window.location.search);
+const isEnabled = urlParams.get("gazeEnabled");
+
+if (isEnabled === "true") {
+  (async () => {
+    await sleep(3000);
+    chrome.runtime.sendMessage({ action: "captureTab" }, (response) => {
+      console.log("Screenshot taken");
+    });
+    sendHTML();
+    addOverlay(tags);
+  })();
+}
