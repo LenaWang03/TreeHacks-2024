@@ -21,8 +21,7 @@ def extract_attributes(tag):
 
     return attributes
 
-def process_html(html_content) -> str:
-    # Parse the HTML content with BeautifulSoup
+def get_tag_details(html_content) -> str:
     soup = BeautifulSoup(html_content, "html.parser")
 
     # Initialize an empty list to hold the tag details
@@ -42,12 +41,3 @@ def process_html(html_content) -> str:
     tag_details_string = json.dumps(tag_details)
     
     return tag_details_string
-
-if __name__ == "__main__":
-    file_path = os.path.join("server", "example_data", "gmail", "gmail.html")
-    
-    with open(file_path, "r", encoding="utf-8") as file:
-        html_content = file.read()
-    
-    print(process_html(html_content)) 
-    
