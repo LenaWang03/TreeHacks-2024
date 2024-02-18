@@ -54,7 +54,7 @@ function addOverlay(tags) {
     const rect = element.getBoundingClientRect();
     const borderWidth = 3; // The border width
     const borderOffset = borderWidth / 2;
-    ctx.strokeStyle = "#0057FF"; // The border color
+    ctx.strokeStyle = "#FFD400"; // The border color
     ctx.lineWidth = borderWidth;
     ctx.strokeRect(
       rect.left + borderOffset,
