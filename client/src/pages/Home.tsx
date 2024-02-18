@@ -14,12 +14,11 @@ const Home = () => {
             </Link>
             <div className="subheading">polaris.</div>
           </div>
-          <div className="bigText">
-            Navigating the web made <span className="underline">easy.</span>
+          <div className="bigText" style={{textAlign:"center"}}>
+          Reimagining an internet made for <span className="underline">everyone.</span>
           </div>
-          <div className="smallText">
-            polaris is a web browser that is designed to be simple and easy to
-            use. It is built with the user in mind.
+          <div className="smallText" style={{textAlign:"center"}}>
+          Polaris is a digital companion designed for everyone. We use large language and multi-modal models to redefine web accessibility and make exploring the web as simple as putting what you want to do into words.
           </div>
           <div className="ctaButton" style={{ marginBottom: "70px" }}>
             <Link to="/home">
