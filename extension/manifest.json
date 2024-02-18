@@ -6,7 +6,8 @@
   "host_permissions": ["<all_urls>"],
   "permissions": ["activeTab", "tabs"],
   "action": {
-    "default_icon": "hello_extensions.png"
+    "default_icon": "hello_extensions.png",
+    "default_popup": "index.html"
   },
   "background": {
     "service_worker": "background.js"
