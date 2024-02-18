@@ -1,34 +1,13 @@
-from typing import List
-from dotenv import load_dotenv
-from openai import OpenAI
-import os
 import json
 from models import LLMGetIdsResponse
 from soup import process_html
 
 from utils import Timer, scale_image
 
-load_dotenv()
+from server.load_ai_clients import load_together_client, load_openai_client
 
-TOGETHER_API_KEY = os.environ.get("TOGETHER_API_KEY")
-OPEN_AI_API_KEY = os.environ.get("OPEN_AI_API_KEY")
-
-
-def load_together_model():
-    client = OpenAI(
-        api_key=TOGETHER_API_KEY,
-        base_url="https://api.together.xyz",
-    )
-    return client
-
-
-def load_openai_model():
-    client = OpenAI(api_key=OPEN_AI_API_KEY)
-
-    return client
-
-
-def get_page_description(client: OpenAI, encoded_url: str) -> str:
+def get_page_description(encoded_url: str) -> str:
+    client = load_openai_client()
     scaled_image_url = scale_image(encoded_url, 0.3)
 
     response = client.chat.completions.create(
@@ -54,7 +33,8 @@ def get_page_description(client: OpenAI, encoded_url: str) -> str:
     return response.choices[0].message.content
 
 
-def get_page_description_from_url(client: OpenAI, url: str) -> str:
+def get_page_description_from_url(url: str) -> str:
+    client = load_openai_client()
     chat_completion = client.chat.completions.create(
         messages=[
             {
@@ -62,14 +42,15 @@ def get_page_description_from_url(client: OpenAI, url: str) -> str:
                 "content": f"I'm at this url: {url}. Describe the elements I'm seeing. Write it in list format.",
             },
         ],
-        model="mistralai/Mixtral-8x7B-Instruct-v0.1",
+        model="meta-llama/Llama-2-70b-chat-hf",
         max_tokens=1024,
     )
 
     return chat_completion.choices[0].message.content
 
 
-def get_next_step(client: OpenAI, desired_action: str, page_description: str) -> str:
+def get_next_step(desired_action: str, page_description: str) -> str:
+    client = load_openai_client()
     prompt = f"""
     <s>[INST] You are a helpful code assistant who helps users navigate the web. Your task is to generate the next task the user should perform based on their desired action and a description of the page they're looking at. So for instance based on the following:
     desired action: I want to see the pictures of my friend Gordon Cheung.
@@ -106,14 +87,15 @@ def get_next_step(client: OpenAI, desired_action: str, page_description: str) ->
                 "content": prompt,
             },
         ],
-        model="mistralai/Mixtral-8x7B-Instruct-v0.1",
+        model="meta-llama/Llama-2-70b-chat-hf",
         max_tokens=1024,
     )
 
     return chat_completion.choices[0].message.content
 
 
-def get_relevant_tag_ids(client: OpenAI, tags: str) -> List[str]:
+def get_relevant_tag_ids(tags: str) -> str:
+    client = load_openai_client()
     # Take in the directions for the next step (a list of steps, returned by Dylan's code),
     # the JSON object of relevant tags, and the textual representation of the screenshot
     # Pending addition of ids to HTML tags
@@ -149,8 +131,8 @@ def get_relevant_tag_ids(client: OpenAI, tags: str) -> List[str]:
 
 
 if __name__ == "__main__":
-    together_client = load_together_model()
-    openai_client = load_openai_model()
+    together_client = load_together_client()
+    openai_client = load_openai_client()
 
     img_encoded_path = r"server\example_data\encoded_img.txt"
 
@@ -161,10 +143,6 @@ if __name__ == "__main__":
     with Timer() as t:
         description = get_page_description(openai_client, file_content)
     print(f"description: {t.interval}")
-
-    # with Timer() as t:
-    #     description = get_page_description_from_url(together_client, "https://stackoverflow.com")
-    # print(f"description: {t.interval}")
 
     with Timer() as t:
         next_step = get_next_step(

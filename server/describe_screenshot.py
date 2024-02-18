@@ -1,13 +1,8 @@
 import base64
 
-from dotenv import dotenv_values
-from openai import OpenAI
+from load_ai_clients import load_openai_client
 
-env_vars = dotenv_values(".env")
-
-OPEN_AI_API_KEY = env_vars["OPEN_AI_API_KEY"]
-
-client = OpenAI(api_key=OPEN_AI_API_KEY)
+client = load_openai_client()
 
 with open(r"server\example_data\gmail\gmail.png", "rb") as img_file:
     encoded_string = base64.b64encode(img_file.read()).decode('utf-8')
