@@ -49,7 +49,7 @@ async def redirect(request: RedirectRequest):
     and returns the website to visit and a refined prompt. If the user clicks the buttons,
     simply return the response. Otherwise, get the URL and refine the prompt.
     """
-    if url is None:
+    if request.url is None:
         url = get_url(request.prompt)
         refined_prompt = refine_prompt(request.prompt)
         response = {"url": url, "prompt": RedirectRequest(refined_prompt, url)}
